@@ -9,12 +9,12 @@ const Product = ({product}) => {
   
   return (
     <Card className='my-3 p-3 rounded'>
-      <Link to={`/product/${id}`}>
+      <Link to={`/products/${id}`}>
         <Card.Img src={images[0].url} variant='top' />
       </Link>
       <Card.Body>
       <Card.Title as='div'>
-        <Link to={`/product/${id}`}>
+        <Link to={`/products/${id}`}>
           <strong>{title}</strong>
         </Link>
       </Card.Title>

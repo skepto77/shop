@@ -1,4 +1,4 @@
-const data = [
+const products = [
   {
     "id": "wi-fi-adapter-tenda-u1",
     "title": "Wi-Fi адаптер Tenda U1",
@@ -963,4 +963,4 @@ const data = [
   },
 ];
 
-export default data;
+module.exports = products;

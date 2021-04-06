@@ -7,7 +7,6 @@ import HomePage from './pages/HomePage';
 import ProductPage from './pages/ProductPage';
 import PageNotFound from './pages/PageNotFound';
 
-
 const App = () => {
   return (
     <Router>
@@ -16,7 +15,7 @@ const App = () => {
         <Container>
           <Switch>
             <Route exact path="/"><HomePage /></Route>
-            <Route path="/product/:id"><ProductPage /></Route>
+            <Route path="/products/:id"><ProductPage /></Route>
             <Route><PageNotFound /></Route>
            </Switch>
         </Container>
