@@ -545,7 +545,7 @@ const data = [
       }
     ],
     "price": 1599,
-    "rating": null,
+    "rating": 0,
     "discount": 0
   },
   {
@@ -682,7 +682,7 @@ const data = [
           },
           {
             "name": "Встроенная память",
-            "value": "32 ГБ"
+            "value": "32 ГБ" 
           },
           {
             "name": "Слот для карты памяти",
