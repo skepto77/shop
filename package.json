@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "start": "node server/server",
     "server": "nodemon server/server",
@@ -21,7 +22,9 @@
   },
   "homepage": "https://github.com/skepto77/shop-mern#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.12.3"
   },
   "devDependencies": {
     "concurrently": "^6.0.1",
