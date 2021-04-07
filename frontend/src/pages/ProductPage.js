@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Row, Col, Image, Button} from 'react-bootstrap';
+import { Row, Col, Image, Button, Tabs, Tab  } from 'react-bootstrap';
 import Rating from '../componets/Rating'
 
 const ProductPage = () => {
@@ -33,12 +33,30 @@ const ProductPage = () => {
               <h2>{product.price} &#8381;</h2>
               <p>{(product.status === 1) ? 'В наличии': 'Нет в наличии'}</p>
               <Button variant="primary" disabled={product.status === 0}>В корзину</Button>
-              <p></p>
-              <p>{product.description}</p>
             </Col>
           </Row>
-          <Row>
+          <Row  className='mt-5'>
             <Col md={12}>
+            <Tabs defaultActiveKey="description" id="uncontrolled-tab-example">
+              <Tab eventKey="description" title="О товаре"  >
+                <p className='mt-4'>{product.description}</p>
+              </Tab>
+              <Tab eventKey="characteristics" title="Характеристики">
+                {product.characteristics.map((el, i) => {
+                  return (
+                    <div key={i} className='mt-4'>
+                      <h5>{el.title}</h5>
+                        {el.items.map((item, j) => (
+                          <div key={j}>
+                            <dt className="col-sm-4">{item.name}</dt>
+                            <dd className="col-sm-8">{item.value}</dd>
+                          </div>
+                        ))}
+                    </div>
+                  )
+                })}
+              </Tab>
+            </Tabs>
             </Col>
           </Row>
         </>
