@@ -13,6 +13,7 @@ node_modules/
 /build
 
 # misc
+/tmp
 .DS_Store
 .quokka
 .env
