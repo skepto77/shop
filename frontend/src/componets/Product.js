@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import { Card, Button } from 'react-bootstrap';
-import Rating from './Rating'
+import Rating from './Rating';
 
-const Product = ({product}) => {
+const Product = ({ product }) => {
   const {title, price, images, rating, _id} = product; 
   const reviews = 0;
   

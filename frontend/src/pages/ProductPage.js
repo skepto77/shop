@@ -1,27 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import { Row, Col, Image, Button, Tabs, Tab  } from 'react-bootstrap';
-import Rating from '../componets/Rating'
+import Rating from '../componets/Rating';
+import Loader from '../componets/Loader';
+import { getProductDetails } from '../actions/product';
 
 const ProductPage = () => {
-  const [product, setProduct] = useState({});
-  const { id } = useParams();
+  const dispatch = useDispatch();
+  const {id} = useParams();
+  const { loading, error, product = {} } = useSelector((state) => state.productDetails);
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      const { data } = await axios.get(`/api/products/${id}`);
-      setProduct(data);
-    }
-    fetchProduct();
-  }, [id])
+   useEffect(() => {
+     dispatch(getProductDetails(id));
+   }, [id, dispatch]);
 
   // const {title, images, rating, price, description, status} = product;
   const reviews = 0;
   
   return (
     <>
-      {Object.keys(product).length === 0 ? 'загрузка': (
+      {loading ? <Loader /> : error ? (<h3>{error}</h3>): (
         <>
           <Row>
             <Col md={4}>

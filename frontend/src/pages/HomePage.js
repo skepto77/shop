@@ -7,9 +7,7 @@ import { getProductsList } from '../actions/product';
 
 const HomePage = () => {
   const dispatch = useDispatch();
-
-  // const data1 = useSelector((state) => state.product)
- const {loading, error, products} = useSelector((state) => state.product)
+  const {loading, error, products} = useSelector((state) => state.productList);
 
   useEffect(() => {
     dispatch(getProductsList());
@@ -26,7 +24,7 @@ const HomePage = () => {
           <Row>
             <CardGroup>
               {products.map((product) => (
-                <Col sm={12} md={6} lg={4} xl={3} key={product.id}>
+                <Col sm={12} md={6} lg={4} xl={3} key={product._id}>
                     <Product product={product} />
                 </Col>
               ))}
