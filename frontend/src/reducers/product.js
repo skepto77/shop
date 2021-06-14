@@ -1,25 +1,26 @@
 import { 
-  PRODUCTS_REQUEST, 
-  PRODUCTS_REQUEST_FAIL, 
-  PRODUCTS_LOADED,
-  PRODUCT_REQUEST, 
-  PRODUCT_REQUEST_FAIL, 
-  PRODUCT_LOADED 
+  PRODUCT_LIST_REQUEST, 
+  PRODUCT_LIST_SUCCESS,
+  PRODUCT_LIST_FAILURE, 
+  PRODUCT_DETAILS_REQUEST, 
+  PRODUCT_DETAILS_SUCCESS,
+  PRODUCT_DETAILS_FAILURE, 
+
 } from '../constants/product';
 
 const productList = (state = { products: [] }, { type, payload }) => {
   switch (type) {
-    case PRODUCTS_REQUEST:
+    case PRODUCT_LIST_REQUEST:
       return {
         products:  [],
         loading: true,
       };
-    case PRODUCTS_LOADED:
+    case PRODUCT_LIST_SUCCESS:
       return { 
         products: payload,
         loading: false,
       };
-    case PRODUCTS_REQUEST_FAIL:
+    case PRODUCT_LIST_FAILURE:
       return {
         products: [],
         error: payload,
@@ -30,21 +31,20 @@ const productList = (state = { products: [] }, { type, payload }) => {
   }
 };
 
-const productDetails = (state = { product: {} }, { type, payload }) => {
+const productDetails = (state = { product: {}, loading: true }, { type, payload }) => {
   switch (type) {
-    case PRODUCT_REQUEST:
+    case PRODUCT_DETAILS_REQUEST:
       return {
-        product:  {},
+        ...state,
         loading: true,
       };
-    case PRODUCT_LOADED:
+    case PRODUCT_DETAILS_SUCCESS:
       return { 
         product: payload,
         loading: false,
       };
-    case PRODUCT_REQUEST_FAIL:
+    case PRODUCT_DETAILS_FAILURE:
       return {
-        product: {},
         error: payload,
         loading: false,
       };

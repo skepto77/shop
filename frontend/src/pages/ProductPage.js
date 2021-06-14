@@ -1,26 +1,31 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Row, Col, Image, Button, Tabs, Tab  } from 'react-bootstrap';
 import Rating from '../componets/Rating';
 import Loader from '../componets/Loader';
+import Message from '../componets/Message';
 import { getProductDetails } from '../actions/product';
 
 const ProductPage = () => {
   const dispatch = useDispatch();
+  const { loading, error, product } = useSelector((state) => state.productDetails);
   const {id} = useParams();
-  const { loading, error, product = {} } = useSelector((state) => state.productDetails);
+  const [quantity, setQuantity] = useState(1);
 
-   useEffect(() => {
+  useEffect(() => {
      dispatch(getProductDetails(id));
-   }, [id, dispatch]);
+   }, [dispatch, id]);
 
-  // const {title, images, rating, price, description, status} = product;
   const reviews = 0;
   
   return (
     <>
-      {loading ? <Loader /> : error ? (<h3>{error}</h3>): (
+      {loading 
+          ? <Loader /> 
+          : error 
+            ? (<h3><Message text={error} variant={'danger'}/></h3>)
+            : (
         <>
           <Row>
             <Col md={4}>
@@ -31,6 +36,9 @@ const ProductPage = () => {
               <Rating value={product.rating} text={` ${reviews} отзывов`}/>
               <h2>{product.price} &#8381;</h2>
               <p>{(product.status === 1) ? 'В наличии': 'Нет в наличии'}</p>
+              <Button variant="light" onClick={() => setQuantity((quantity) => quantity - 1)} style={{marginRight: '10px'}} disabled={quantity < 2}>-</Button> 
+              {quantity}
+                <Button variant="light" onClick={() => setQuantity((quantity) => quantity + 1)} style={{marginRight: '10px', marginLeft: '10px'}} disabled={quantity === product.quantity}>+</Button> 
               <Button variant="primary" disabled={product.status === 0}>В корзину</Button>
             </Col>
           </Row>
