@@ -6,6 +6,7 @@ import Rating from '../componets/Rating';
 import Loader from '../componets/Loader';
 import Message from '../componets/Message';
 import { getProductDetails } from '../actions/product';
+import { addToCart } from '../actions/cart';
 
 const ProductPage = () => {
   const dispatch = useDispatch();
@@ -16,6 +17,10 @@ const ProductPage = () => {
   useEffect(() => {
      dispatch(getProductDetails(id));
    }, [dispatch, id]);
+
+  const handlerAddToCart = (id, quantity) => {
+    dispatch(addToCart(id, quantity));
+  }
 
   const reviews = 0;
   
@@ -38,8 +43,13 @@ const ProductPage = () => {
               <p>{(product.status === 1) ? 'В наличии': 'Нет в наличии'}</p>
               <Button variant="light" onClick={() => setQuantity((quantity) => quantity - 1)} style={{marginRight: '10px'}} disabled={quantity < 2}>-</Button> 
               {quantity}
-                <Button variant="light" onClick={() => setQuantity((quantity) => quantity + 1)} style={{marginRight: '10px', marginLeft: '10px'}} disabled={quantity === product.quantity}>+</Button> 
-              <Button variant="primary" disabled={product.status === 0}>В корзину</Button>
+              <Button variant="light" onClick={() => setQuantity((quantity) => quantity + 1)} style={{marginRight: '10px', marginLeft: '10px'}} disabled={quantity === product.quantity}>+</Button> 
+              <Button 
+                variant="primary" 
+                disabled={product.status === 0}
+                onClick={() => handlerAddToCart(id, quantity)}>
+                В корзину
+              </Button>
             </Col>
           </Row>
           <Row  className='mt-5'>
