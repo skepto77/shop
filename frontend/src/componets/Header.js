@@ -1,8 +1,13 @@
 import React from 'react';
 import { Navbar, Nav, Container} from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import { useSelector } from 'react-redux';
+
 
 const Header = () => {
+  const { cartItems } = useSelector((state) => state.cart);
+  const quantityOfItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+
   return (
     <header className="shadow-sm mb-5 bg-white rounded">
       <Navbar variant="light" bg="light">
@@ -30,7 +35,7 @@ const Header = () => {
                   </LinkContainer>
                   <LinkContainer to="/cart">
                       <Nav.Link>
-                        <i className="bi bi-cart" style={{marginRight: '7px'}}></i> Корзина
+                        <i className="bi bi-cart" style={{marginRight: '7px'}}></i> Корзина ({quantityOfItems})
                     </Nav.Link>
                   </LinkContainer>
                 </Navbar.Text>

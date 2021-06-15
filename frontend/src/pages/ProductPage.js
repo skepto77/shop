@@ -22,6 +22,12 @@ const ProductPage = () => {
     dispatch(addToCart(id, quantity));
   }
 
+  // import Modal from 'react-bootstrap/Modal'
+  // const [show, setShow] = useState(false);
+
+  // const handleClose = () => setShow(false);
+  // const handleShow = () => setShow(true);
+
   const reviews = 0;
   
   return (
