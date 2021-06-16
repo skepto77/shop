@@ -5,10 +5,6 @@ import { Row, Col } from 'react-bootstrap';
 const CartPage = () => {
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
-  useEffect(() => {
-    dispatch(getProductDetails(id));
-  }, [dispatch, id]);
-
 
   return (
     
