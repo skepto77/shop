@@ -24,8 +24,7 @@ const authUsers = asyncHandler(async (req, res) => {
 
 const createUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
-  console.log(req.body)
-  console.log(name, email, password)
+  
   const existsUser = await User.findOne({ email });
   
   if (existsUser) {
@@ -34,7 +33,7 @@ const createUser = asyncHandler(async (req, res) => {
   }
 
   const user = await User.create({ name, email, password });
-  console.log(user)
+
   if (user) {
     res.status(201).json({
       _id: user._id,

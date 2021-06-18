@@ -5,8 +5,8 @@ import { Row, Col, Alert  } from 'react-bootstrap';
 const Message = ({ variant, text }) => {
 
   return (
-    <Row>
-      <Col>
+    <Row className='mt-5 justify-content-md-center'>
+      <Col md={8} xs={12}>
         <Alert variant={variant}>{text}</Alert>
       </Col>
     </Row>
