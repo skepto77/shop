@@ -17,7 +17,7 @@ const authUsers = asyncHandler(async (req, res) => {
     })
   } else {
     res.status(401);
-    throw new Error('Неверный email или пароль');
+    res.json({ message: 'Неверный email или пароль' });
   }
 
 });
@@ -29,22 +29,25 @@ const createUser = asyncHandler(async (req, res) => {
   
   if (existsUser) {
     res.status(400);
-    throw new Error('Пользователь с таким email уже сществует');
+    res.json({ message: 'Пользователь с таким email уже сществует' });
+    // throw new Error('Пользователь с таким email уже сществует');
   }
-
-  const user = await User.create({ name, email, password });
-
-  if (user) {
-    res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      token: generateToken(user._id)
-    })
-  } else {
+  
+  try {
+    const user = await User.create({ name, email, password });
+    if (user) {
+      res.status(201).json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        token: generateToken(user._id)
+      })
+    } 
+  }
+  catch {
     res.status(400);
-    throw new Error('Неверные данные пользователя');
+    res.json({ message: 'Неверные данные пользователя' });
   }
 
 });

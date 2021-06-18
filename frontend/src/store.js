@@ -3,13 +3,14 @@ import { combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { productList, productDetails } from './reducers/product';
 import { cart } from './reducers/cart';
-import { userLogin } from './reducers/user';
+import { userLogin, userRegister } from './reducers/user';
 
 const reducers = combineReducers({
   productList,
   productDetails,
   cart,
   user: userLogin,
+  userRegister,
 
 });
 

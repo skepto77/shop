@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import ProductPage from './pages/ProductPage';
 import CartPage from './pages/CartPage.js';
 import LoginPage from './pages/LoginPage.js';
+import RegisterPage from './pages/RegisterPage.js';
 import PageNotFound from './pages/PageNotFound';
 
 const App = () => {
@@ -20,7 +21,7 @@ const App = () => {
             <Route path="/product/:id"><ProductPage /></Route>
             <Route path="/cart/"><CartPage /></Route>
             <Route path="/login"><LoginPage /></Route>
-            <Route path="/register"><CartPage /></Route>
+            <Route path="/register"><RegisterPage /></Route>
             <Route><PageNotFound /></Route>
            </Switch>
         </Container>
