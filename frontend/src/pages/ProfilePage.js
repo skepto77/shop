@@ -2,35 +2,63 @@ import React, { useState, useEffect }  from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import { Row, Col, Form, Button } from 'react-bootstrap';
-import { login } from '../actions/user';
+import { getUserDetails, updateUser } from '../actions/user';
 import Loader from '../componets/Loader';
 import Message from '../componets/Message';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [message, setMessage] = useState(null);
   const history = useHistory();
-  const { loading, error, userInfo } = useSelector((state) => state.user);
+  const { loading, error, user } = useSelector((state) => state.userDetails);
+  const { userInfo } = useSelector((state) => state.user);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(login(email, password));
+    if (password !== confirmPassword) {
+      setMessage('Пароли не совпадают');
+    } else {
+      dispatch(updateUser({ id: user._id, name, email, password}));
+    }
+
   }
 
   useEffect(() => {
-    if(userInfo) {
-      history.push('/');
+    if(!userInfo) {
+      history.push('/login');
+    } else {
+        if (!user || !user.name) {
+        dispatch(getUserDetails());
+        console.log(user)
+      } else {
+        setName(user.name);
+        setEmail(user.email);
+      }
+
     }
-  },[history, userInfo])
+  },[history, userInfo, user, dispatch])
 
   return (
     <>
     {loading && <Loader />} 
+    {message &&  <Message text={message} variant={'danger'}/>}
     {error &&  <Message text={error} variant={'danger'}/>}
       <Row className='mt-5 justify-content-md-center'>
         <Col md={6} xs={12}>
           <Form onSubmit={submitHandler}>
+          <Form.Group controlId="name">
+              <Form.Label>Имя</Form.Label>
+              <Form.Control 
+                type="text" 
+                placeholder="Введите имя" 
+                value={name}
+                onChange={(e)=>setName(e.target.value)}  
+                />
+            </Form.Group>
             <Form.Group controlId="email">
               <Form.Label>Email</Form.Label>
               <Form.Control 
@@ -49,8 +77,17 @@ const LoginPage = () => {
                 onChange={(e)=>setPassword(e.target.value)}  
               />
             </Form.Group>
+            <Form.Group controlId="password">
+              <Form.Label>Подтверждение пароля</Form.Label>
+              <Form.Control 
+                type="password" 
+                placeholder="Подтвердите пароль" 
+                value={confirmPassword}
+                onChange={(e)=>setConfirmPassword(e.target.value)}  
+              />
+            </Form.Group>
             <Button variant="primary" type="submit">
-              Войти
+              Сохранить
             </Button>
           </Form>
         </Col>

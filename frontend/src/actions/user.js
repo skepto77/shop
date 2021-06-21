@@ -7,6 +7,12 @@ import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAILURE,
+  USER_DETAILS_REQUEST,
+  USER_DETAILS_SUCCESS,
+  USER_DETAILS_FAILURE,
+  USER_UPDATE_REQUEST,
+  USER_UPDATE_SUCCESS,
+  USER_UPDATE_FAILURE,
 } from '../constants/user';
 
 const login = (email, password) => async (dispatch) => {
@@ -32,12 +38,12 @@ const login = (email, password) => async (dispatch) => {
         : error.message
     });
   }
-}
+};
 
 const logout = () => async (dispatch) => {
   dispatch({ type:  USER_LOGOUT });
   localStorage.removeItem('user');
-}
+};
 
 const register = (name, email, password) => async (dispatch) => {
   try {
@@ -64,5 +70,60 @@ const register = (name, email, password) => async (dispatch) => {
         : error.message
     });
   }
-}
-export { login, logout, register };
+};
+
+
+const getUserDetails = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_DETAILS_REQUEST });
+
+    const { user: { userInfo: { token } } } = getState();
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    }
+
+    const { data } = await axios.get(`/api/users/profile`, config);
+
+    dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
+
+  } catch (error) {
+    dispatch({ 
+      type:   USER_DETAILS_FAILURE, 
+      payload: error.response && error.response.data.message 
+        ? error.response.data.message
+        : error.message
+    });
+  }
+};
+
+const updateUser = (user) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_UPDATE_REQUEST });
+
+    const { user: { userInfo: { token } } } = getState();
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    }
+
+    const { data } = await axios.put(`/api/users/profile`, user, config);
+
+    dispatch({ type: USER_UPDATE_SUCCESS, payload: data });
+
+  } catch (error) {
+    dispatch({ 
+      type:   USER_UPDATE_FAILURE, 
+      payload: error.response && error.response.data.message 
+        ? error.response.data.message
+        : error.message
+    });
+  }
+};
+
+
+export { login, logout, register, getUserDetails, updateUser };

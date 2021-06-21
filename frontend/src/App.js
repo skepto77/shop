@@ -5,9 +5,10 @@ import Header from './componets/Header';
 import Footer from './componets/Footer';
 import HomePage from './pages/HomePage';
 import ProductPage from './pages/ProductPage';
-import CartPage from './pages/CartPage.js';
-import LoginPage from './pages/LoginPage.js';
-import RegisterPage from './pages/RegisterPage.js';
+import CartPage from './pages/CartPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import ProfilePage from './pages/ProfilePage';
 import PageNotFound from './pages/PageNotFound';
 
 const App = () => {
@@ -22,6 +23,7 @@ const App = () => {
             <Route path="/cart/"><CartPage /></Route>
             <Route path="/login"><LoginPage /></Route>
             <Route path="/register"><RegisterPage /></Route>
+            <Route path="/profile"><ProfilePage /></Route>
             <Route><PageNotFound /></Route>
            </Switch>
         </Container>
