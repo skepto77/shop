@@ -21,11 +21,11 @@ const App = () => {
           <Switch>
             <Route exact path="/"><HomePage /></Route>
             <Route path="/product/:id"><ProductPage /></Route>
-            <Route path="/cart/"><CartPage /></Route>
+            <Route path="/cart"><CartPage /></Route>
             <Route path="/login"><LoginPage /></Route>
             <Route path="/register"><RegisterPage /></Route>
             <Route path="/profile"><ProfilePage /></Route>
-            <Route path="/users"><UserListPage /></Route>
+            <Route path="/admin/users"><UserListPage /></Route>
             <Route><PageNotFound /></Route>
            </Switch>
         </Container>

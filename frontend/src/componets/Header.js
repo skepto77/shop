@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Nav, Container} from 'react-bootstrap';
+import { Navbar, Nav, Container, Dropdown} from 'react-bootstrap';
 import { LinkContainer} from 'react-router-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../actions/user';
@@ -16,7 +16,7 @@ const Header = () => {
 
   return (
     <header className="shadow-sm mb-5 bg-white rounded">
-      <Navbar variant="light" bg="light">
+      <Navbar variant="light" style={{backgroundColor: '#fff',}}>
         <Container>
             <LinkContainer to="/">
               <Navbar.Brand>
@@ -30,6 +30,7 @@ const Header = () => {
                 Shop
               </Navbar.Brand>
             </LinkContainer>
+
             <Nav className="justify-content-end">
               {userInfo ? 
                 <>
@@ -40,6 +41,24 @@ const Header = () => {
                     </Nav.Link>
                   </LinkContainer>
                 </Nav.Item>
+              {userInfo.isAdmin && (
+                <Dropdown>
+                  <Dropdown.Toggle variant="success" id="adminMenu">
+                    <i className="bi bi-list"></i>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <LinkContainer to="/admin/orders/">
+                      <Dropdown.Item>Заказы</Dropdown.Item>
+                    </LinkContainer>
+                    <LinkContainer to="/admin/products/">
+                      <Dropdown.Item>Товары</Dropdown.Item>
+                    </LinkContainer>
+                    <LinkContainer to="/admin/users/">
+                      <Dropdown.Item>Пользователи</Dropdown.Item>
+                    </LinkContainer>
+                  </Dropdown.Menu>
+                </Dropdown>
+                )}
                 <Nav.Item>
                   <LinkContainer  to="/logout">
                     <Nav.Link onClick={logoutHandler}>
@@ -47,7 +66,7 @@ const Header = () => {
                     </Nav.Link>
                   </LinkContainer>
                 </Nav.Item>
-                </>
+                </>                
                 :
                 <Nav.Item>
                 <LinkContainer to="/login">

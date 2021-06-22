@@ -54,11 +54,11 @@ const UserListPage = () => {
               <td style={{textAlign: 'center', }}>{isAdmin ? <i class="bi bi-check lg" style={{color: 'green',fontSize: '40px',  }}></i> : ''}</td>
               <td style={{whiteSpace: 'nowrap', }}>
                 <Link to={`/user/${_id}/edit`}>
-                  <Button variant="warning"><i class="bi bi-pencil"></i></Button>
+                  <Button variant="warning"><i className="bi bi-pencil"></i></Button>
                 </Link>
 
                 {' '}
-              <Button variant="danger" onClick={() => removeUserHandler(_id)}><i class="bi bi-trash"></i></Button>
+              <Button variant="danger" onClick={() => removeUserHandler(_id)}><i className="bi bi-trash"></i></Button>
               </td>
             </tr>
           )
