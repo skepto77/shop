@@ -9,9 +9,15 @@ import {
   USER_DETAILS_REQUEST,
   USER_DETAILS_SUCCESS,
   USER_DETAILS_FAILURE,
+  USER_DETAILS_RESET,
   USER_UPDATE_REQUEST,
   USER_UPDATE_SUCCESS,
   USER_UPDATE_FAILURE,
+  USER_LIST_REQUEST,
+  USER_LIST_SUCCESS,
+  USER_LIST_FAILURE,
+  USER_LIST_RESET,
+
 } from '../constants/user';
 
 const userLogin = (state = {}, { type, payload }) => {
@@ -58,7 +64,7 @@ const userRegister = (state = {}, { type, payload }) => {
   }
 };
 
-const userDetails = (state = { user1: {} }, { type, payload }) => {
+const userDetails = (state = { user: {} }, { type, payload }) => {
   switch (type) {
     case USER_DETAILS_REQUEST:
       return {
@@ -73,6 +79,11 @@ const userDetails = (state = { user1: {} }, { type, payload }) => {
     case USER_DETAILS_FAILURE:
       return {
         error: payload,
+        loading: false,
+      };
+    case USER_DETAILS_RESET:
+      return {
+        user: {},
         loading: false,
       };
     default:
@@ -101,5 +112,31 @@ const userUpdate = (state = { }, { type, payload }) => {
   }
 };
 
+const userList = (state = {users:[] }, { type, payload }) => {
+  switch (type) {
+    case USER_LIST_REQUEST:
+      return {
+        loading: true,
+      };
+    case USER_LIST_SUCCESS:
+      return { 
+        users: payload,
+        loading: false,
+      };
+    case USER_LIST_FAILURE:
+      return {
+        users: [],
+        error: payload,
+        loading: false,
+      };
+    case USER_LIST_RESET:
+      return {
+        users: [],
+        loading: false,
+      };
+    default:
+      return state;
+  }
+};
 
-export { userLogin, userRegister, userDetails, userUpdate };
+export { userLogin, userRegister, userDetails, userUpdate, userList };
