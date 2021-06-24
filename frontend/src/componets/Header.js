@@ -15,8 +15,8 @@ const Header = () => {
   }
 
   return (
-    <header className="shadow-sm mb-5 bg-white rounded">
-      <Navbar variant="light" style={{backgroundColor: '#fff',}}>
+    <header className="mb-5 bg-white">
+      <Navbar variant="light" className="bg-white shadow-sm">
         <Container>
             <LinkContainer to="/">
               <Navbar.Brand>
@@ -37,13 +37,13 @@ const Header = () => {
                 <Nav.Item>
                   <LinkContainer to="/profile">
                     <Nav.Link>
-                      <i className="bi bi-person-circle" style={{marginRight: '10px', fontSize: '20px'}}></i>{userInfo.name}
+                      <i className="bi bi-person-circle" style={{marginRight: '10px'}}></i>{userInfo.name}
                     </Nav.Link>
                   </LinkContainer>
                 </Nav.Item>
               {userInfo.isAdmin && (
                 <Dropdown>
-                  <Dropdown.Toggle variant="success" id="adminMenu">
+                  <Dropdown.Toggle variant="light" id="adminMenu">
                     <i className="bi bi-list"></i>
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
@@ -62,7 +62,7 @@ const Header = () => {
                 <Nav.Item>
                   <LinkContainer  to="/logout">
                     <Nav.Link onClick={logoutHandler}>
-                    <i className="bi bi-arrow-right-circle" style={{marginRight: '10px', fontSize: '20px'}}></i>Выйти
+                    <i className="bi bi-arrow-right-circle" style={{marginRight: '10px'}}></i>Выйти
                     </Nav.Link>
                   </LinkContainer>
                 </Nav.Item>
@@ -71,7 +71,7 @@ const Header = () => {
                 <Nav.Item>
                 <LinkContainer to="/login">
                     <Nav.Link>
-                      <i className="bi bi-person" style={{marginRight: '10px', fontSize: '20px'}}></i>Войти
+                      <i className="bi bi-person" style={{marginRight: '10px'}}></i>Войти
                     </Nav.Link>
                   </LinkContainer>
                 </Nav.Item>
@@ -79,7 +79,7 @@ const Header = () => {
                 <Nav.Item>
                   <LinkContainer to="/cart">
                       <Nav.Link>
-                        <i className="bi bi-cart-fill" style={{marginRight: '7px', fontSize: '20px'}}></i>({quantityOfItems})
+                        <i className="bi bi-cart" style={{marginRight: '7px'}}></i>({quantityOfItems})
                     </Nav.Link>
                   </LinkContainer>
                 </Nav.Item>

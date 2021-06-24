@@ -11,3 +11,24 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+table td {
+  vertical-align: middle !important;
+}
+
+i {
+  font-size: 18px;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: rgba(0,0,0,.9);
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+  color: rgba(0,0,0,.5);
+}
+
+.btn-lg {
+  font-size: 16px;
+  font-weight: 500;
+}

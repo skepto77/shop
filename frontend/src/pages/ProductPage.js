@@ -35,7 +35,7 @@ const ProductPage = () => {
       {loading 
           ? <Loader /> 
           : error 
-            ? (<h3><Message text={error} variant={'danger'}/></h3>)
+            ? (<h3><Message variant={'danger'}>{error}</Message></h3>)
             : (
         <>
           <Row>
@@ -47,11 +47,12 @@ const ProductPage = () => {
               <Rating value={product.rating} text={` ${reviews} отзывов`}/>
               <h2>{product.price} &#8381;</h2>
               <p>{(product.status === 1) ? 'В наличии': 'Нет в наличии'}</p>
-              <Button variant="light" onClick={() => setQuantity((quantity) => quantity - 1)} style={{marginRight: '10px'}} disabled={quantity < 2}>-</Button> 
+              <Button variant="light" size="lg" onClick={() => setQuantity((quantity) => quantity - 1)} style={{marginRight: '10px'}} disabled={quantity < 2}>-</Button> 
               {quantity}
-              <Button variant="light" onClick={() => setQuantity((quantity) => quantity + 1)} style={{marginRight: '10px', marginLeft: '10px'}} disabled={quantity === product.quantity}>+</Button> 
+              <Button variant="light" size="lg" onClick={() => setQuantity((quantity) => quantity + 1)} style={{marginRight: '10px', marginLeft: '10px'}} disabled={quantity === product.quantity}>+</Button> 
               <Button 
                 variant="primary" 
+                size="lg"
                 disabled={product.status === 0}
                 onClick={() => handlerAddToCart(id, quantity)}>
                 В корзину

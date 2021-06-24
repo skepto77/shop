@@ -27,7 +27,7 @@ const LoginPage = () => {
   return (
     <>
     {loading && <Loader />} 
-    {error &&  <Message text={error} variant={'danger'}/>}
+    {error &&  <Message variant={'danger'}>{error}</Message>}
       <Row className='mt-5 justify-content-md-center'>
         <Col md={6} xs={12}>
           <Form onSubmit={submitHandler}>
@@ -49,7 +49,7 @@ const LoginPage = () => {
                 onChange={(e)=>setPassword(e.target.value)}  
               />
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" size="lg" type="submit">
               Войти
             </Button>
           </Form>

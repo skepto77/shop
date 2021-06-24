@@ -1,6 +1,6 @@
 import React, { useState, useEffect }  from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { getUserDetails, updateUser } from '../actions/user';
 import Loader from '../componets/Loader';
@@ -13,6 +13,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState(null);
+  const [messageSuccess, setMessageSuccess] = useState(null);
   const history = useHistory();
   const { loading, error, user } = useSelector((state) => state.userDetails);
   const { userInfo } = useSelector((state) => state.user);
@@ -21,8 +22,11 @@ const LoginPage = () => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setMessage('Пароли не совпадают');
+
     } else {
       dispatch(updateUser({ id: user._id, name, email, password}));
+      setMessage(null);
+      setMessageSuccess('Данные сохранены');
     }
 
   }
@@ -33,7 +37,6 @@ const LoginPage = () => {
     } else {
         if (!user || !user.name) {
         dispatch(getUserDetails());
-        console.log(user)
       } else {
         setName(user.name);
         setEmail(user.email);
@@ -45,8 +48,9 @@ const LoginPage = () => {
   return (
     <>
     {loading && <Loader />} 
-    {message &&  <Message text={message} variant={'danger'}/>}
-    {error &&  <Message text={error} variant={'danger'}/>}
+    {message &&  <Message variant={'danger'}>{message}</Message>}
+    {error && <Message variant={'danger'}>{error}</Message>}
+    {messageSuccess && !message &&  <Message variant={'success'}>{messageSuccess}</Message>}
       <Row className='mt-5 justify-content-md-center'>
         <Col md={6} xs={12}>
           <Form onSubmit={submitHandler}>
@@ -86,17 +90,10 @@ const LoginPage = () => {
                 onChange={(e)=>setConfirmPassword(e.target.value)}  
               />
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" size="lg" type="submit">
               Сохранить
             </Button>
           </Form>
-        </Col>
-      </Row>
-      <Row className='mt-5 justify-content-md-center'>
-        <Col md={6} xs={12}>
-            <Link to='/register'>
-               Регистрация
-            </Link>
         </Col>
       </Row>
 
