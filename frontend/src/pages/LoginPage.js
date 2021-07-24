@@ -1,6 +1,6 @@
 import React, { useState, useEffect }  from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory, useLocation, Link } from 'react-router-dom';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { login } from '../actions/user';
 import Loader from '../componets/Loader';
@@ -11,8 +11,11 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const history = useHistory();
+  const location = useLocation();
   const { loading, error, userInfo } = useSelector((state) => state.user);
 
+  const redirect = location.search ? location.search.split('=')[1] : '/';
+  
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(login(email, password));
@@ -20,9 +23,9 @@ const LoginPage = () => {
 
   useEffect(() => {
     if(userInfo) {
-      history.push('/');
+      history.push(redirect);
     }
-  },[history, userInfo])
+  },[history, redirect, userInfo])
 
   return (
     <>

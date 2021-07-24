@@ -2,7 +2,6 @@
 
 # dependencies
 node_modules
-node_modules/
 /.pnp
 .pnp.js
 
@@ -14,6 +13,7 @@ node_modules/
 
 # misc
 /tmp
+.vscode
 .DS_Store
 .quokka
 .env

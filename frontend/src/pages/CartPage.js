@@ -9,6 +9,7 @@ const CartPage = () => {
   const dispatch = useDispatch();
   const { product } = useSelector((state) => state.productDetails);
   const { cartItems } = useSelector((state) => state.cart);
+  const history = useHistory();
 
   const handlerMinusQuantity = (id, quantity) => {
     quantity =  Number(quantity) - Number(quantity) - 1
@@ -22,6 +23,10 @@ const CartPage = () => {
 
   const handlerRemoveFromCart = (id) => {
     dispatch(removeFromCart(id));
+  }
+
+  const handlerCheckout = () => {
+    history.push('/login?redirect=shipping')
   }
 
   return (
@@ -78,9 +83,7 @@ const CartPage = () => {
               <ListGroup.Item>Общая стоимость: {cartItems.reduce((acc, item) => acc + item.quantity * item.price, 0)} ₽</ListGroup.Item>
             </ListGroup>
             <Card.Body>
-            <Link to='/'>
-                <Button variant="success" size="lg" disabled={!cartItems.length}>Оформить заказ</Button>
-            </Link>
+              <Button variant="success" size="lg" disabled={!cartItems.length} onClick={() => handlerCheckout()}>Оформить заказ</Button>
             </Card.Body>
         </Card>  
         </Col>
