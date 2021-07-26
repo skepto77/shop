@@ -2,6 +2,7 @@ import React, { useState, useEffect }  from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Row, Col, Form, Button, Table } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 import { getUserDetails, updateUser } from '../actions/user';
 import { getOrderListCurrentUser } from '../actions/order';
 import Loader from '../componets/Loader';
@@ -129,7 +130,9 @@ const LoginPage = () => {
                 <td>{!isPaid ? <i class="bi bi-x lg" style={{color: 'red',fontSize: '40px',  }}></i> : <i className="bi bi-check lg" style={{color: 'green',fontSize: '40px',  }}></i>}</td>
                 <td>{!isDelivered? <i class="bi bi-x lg" style={{color: 'red',fontSize: '40px',  }}></i> : <i className="bi bi-check lg" style={{color: 'green',fontSize: '40px',  }}></i>}</td>
                 <td>
-                <Button variant="light" size="lg" onClick={() => ''} style={{marginRight: '10px'}} disabled>подробности</Button>
+                <LinkContainer to={`/order/${_id}`}>
+                  <Button variant="light" size="lg" >подробности</Button>
+                </LinkContainer>
                 </td>
               </tr>
                 )

@@ -30,7 +30,14 @@ const createOrder = asyncHandler(async (req, res) => {
 const getOrderById = asyncHandler(async (req, res) => {
   try {
     const order = await Order.findById(req.params.id).populate('user', 'name email');
-    res.json(order);
+    // console.log(req.params.id, req.user._id)
+    // console.log(typeof order.user._id, typeof req.user._id)
+    if (order.user._id.toString() === req.user._id.toString() || req.user.isAdmin) {
+      res.status(201).json(order);
+      return;
+    }
+    res.status(500).json({ message: `Нет прав для просмотра заказа` })
+    
   } catch (err) {
     res.status(404).json({ message: `Заказ не найден` })
    }

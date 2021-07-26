@@ -11,12 +11,10 @@ const OrderPage = () => {
   const dispatch = useDispatch();
   const { order, loading, error } = useSelector((state) => state.orderDetails);
   const { id } = useParams();
-  
   useEffect(() => {
     dispatch(getOrderDetails(id));
   }, [dispatch, id]);
-
-  console.log(order)
+  
   return (
     <>
       {loading 
