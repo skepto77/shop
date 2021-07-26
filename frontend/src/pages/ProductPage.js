@@ -40,7 +40,7 @@ const ProductPage = () => {
         <>
           <Row>
             <Col md={4}>
-              <Image src={product.images[0].url} variant='top' alt={product.title} fluid className="border"/>
+              <Image src={product.images[0].url} variant='top' alt={product.title} fluid className="rounded"/>
             </Col>
             <Col md={8}>
               <h3>{product.title}</h3>

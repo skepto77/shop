@@ -1,8 +1,9 @@
 import React, { useState, useEffect }  from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Row, Col, Form, Button } from 'react-bootstrap';
+import { Row, Col, Form, Button, Table } from 'react-bootstrap';
 import { getUserDetails, updateUser } from '../actions/user';
+import { getOrderListCurrentUser } from '../actions/order';
 import Loader from '../componets/Loader';
 import Message from '../componets/Message';
 
@@ -17,6 +18,7 @@ const LoginPage = () => {
   const history = useHistory();
   const { loading, error, user } = useSelector((state) => state.userDetails);
   const { userInfo } = useSelector((state) => state.user);
+  const { loading: loadingOrders, error: errorOrders, orders } = useSelector((state) => state.orderList);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -37,6 +39,7 @@ const LoginPage = () => {
     } else {
         if (!user || !user.name) {
         dispatch(getUserDetails());
+        dispatch(getOrderListCurrentUser());
       } else {
         setName(user.name);
         setEmail(user.email);
@@ -52,7 +55,7 @@ const LoginPage = () => {
     {error && <Message variant={'danger'}>{error}</Message>}
     {messageSuccess && !message &&  <Message variant={'success'}>{messageSuccess}</Message>}
       <Row className='mt-5 justify-content-md-center'>
-        <Col md={6} xs={12}>
+        <Col md={3} xs={12}>
           <Form onSubmit={submitHandler}>
           <Form.Group controlId="name">
               <Form.Label>Имя</Form.Label>
@@ -94,6 +97,46 @@ const LoginPage = () => {
               Сохранить
             </Button>
           </Form>
+        </Col>
+        <Col md={9} xs={12}>
+          <h3>Мои заказы</h3> 
+          {loadingOrders 
+            ? <Loader /> 
+            : errorOrders  
+              ? (<h3><Message variant={'danger'}>{errorOrders }</Message></h3>)
+              : (
+          <Table responsive="md">
+            <thead>
+              <tr>
+                <th>ID2</th>
+                <th>Дата</th>
+                <th>Сумма</th>
+                <th>Оплачен</th>
+                <th>Доставлен</th>
+              </tr>
+            </thead>
+            <tbody>
+        
+          {orders && orders
+            .sort((a, b) =>  Date.parse(b.createdAt) - Date.parse(a.createdAt))
+            .map((item, index) => {
+            const {_id, createdAt, totalPrice, isPaid, isDelivered} = item;
+            return (
+              <tr key={index}>
+                <td>{_id}</td>
+                <td>{createdAt.substring(0, 10)}</td>
+                <td>{totalPrice}</td>
+                <td>{!isPaid ? <i class="bi bi-x lg" style={{color: 'red',fontSize: '40px',  }}></i> : <i className="bi bi-check lg" style={{color: 'green',fontSize: '40px',  }}></i>}</td>
+                <td>{!isDelivered? <i class="bi bi-x lg" style={{color: 'red',fontSize: '40px',  }}></i> : <i className="bi bi-check lg" style={{color: 'green',fontSize: '40px',  }}></i>}</td>
+                <td>
+                <Button variant="light" size="lg" onClick={() => ''} style={{marginRight: '10px'}} disabled>подробности</Button>
+                </td>
+              </tr>
+                )
+                })} 
+                </tbody>
+              </Table>
+            )}
         </Col>
       </Row>
 

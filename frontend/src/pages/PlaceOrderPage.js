@@ -3,16 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Table, Card, Image, Button, ListGroup  } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { createOrder } from '../actions/order';
-import Loader from '../componets/Loader';
-import Message from '../componets/Message';
 import CheckoutSteps from '../componets/CheckoutSteps'
 
 const PlaceOrderPage = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-
   const { cartItems, shippingAdress, paymentMethod, delivery } = useSelector((state) => state.cart);
-
+ 
+  // checking completion of previous steps
   useEffect(() => {
     if (!cartItems) {
       history.push('/')
@@ -26,21 +24,19 @@ const PlaceOrderPage = () => {
   });
 
   const { surname, name, country, postalCode, city, address } = useSelector((state) => state.cart.shippingAdress);
+ 
   let deliveryMethod, deliveryCost;
   delivery && ({ deliveryMethod, deliveryCost} = delivery);
+  
   const { order, success } = useSelector((state) => state.order);
-
-  // const [message, setMessage] = useState(null);
 
   const totalСostItems = cartItems && cartItems.reduce((acc, item) => acc + item.quantity * item.price, 0);
 
   useEffect(() => {
     if (success) {
-      console.log(order._id)
       history.push(`/order/${order._id}`)
     }
   },[order, success, history]);
-
 
   const handlerSubmitOrder = () => {
     const order = { 
@@ -48,17 +44,13 @@ const PlaceOrderPage = () => {
       shippingAddress: shippingAdress,
       paymentMethod: paymentMethod,
       shippingPrice: deliveryCost,
-      totalPrice: deliveryCost
+      totalPrice: totalСostItems
     }
     dispatch(createOrder(order));
-    
   }
 
   return (
     <>
-      {/* {loading && <Loader />} 
-      {message &&  <Message text={message} variant={'danger'}/>}
-      {error &&  <Message text={error} variant={'danger'}/>} */}
       <CheckoutSteps step1 step2 step3 step4/>
       <Row className='mt-1'>
         <Col md={12}>
@@ -161,7 +153,6 @@ const PlaceOrderPage = () => {
         </Col>
       </Row>
       </>
-
   );
 };
 export default PlaceOrderPage;

@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: rgb(238, 238, 244);
 }
 
 code {
@@ -28,8 +29,33 @@ i {
   color: rgba(0,0,0,.5);
 }
 
-.btn-lg {
+.btn-lg, .nav-link {
   font-size: 16px;
   font-weight: 500;
 }
 
+.nav-tabs .nav-link, .nav-pills .nav-link {
+  background-color: rgb(226, 226, 226);
+  margin-left: 10px;
+  color: rgb(73, 73, 73);
+}
+
+
+.list-group, .card, table, .table th, .table thead th, .form-control, .rounded {
+  border-radius: 10px !important;
+  border: 0 !important;
+  background-color: rgb(255, 255, 255);
+}
+
+.tab-content  {
+  border-radius: 10px !important;
+  border: 0 !important;
+  padding: 40px;
+  background-color: rgb(255, 255, 255);
+}
+
+.nav-tabs,.nav-tabs .nav-link  {
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
+  border: 0;
+}

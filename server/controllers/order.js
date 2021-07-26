@@ -27,4 +27,22 @@ const createOrder = asyncHandler(async (req, res) => {
   }
 });
 
-export { createOrder };
+const getOrderById = asyncHandler(async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id).populate('user', 'name email');
+    res.json(order);
+  } catch (err) {
+    res.status(404).json({ message: `Заказ не найден` })
+   }
+});
+
+const getOrdersListCurrentUser = asyncHandler(async (req, res) => {
+  try {
+    const orders = await Order.find({user: req.user._id});
+    res.json(orders);
+  } catch (err) {
+    res.status(404).json({ message: `Заказы не найдены` })
+   }
+});
+
+export { createOrder, getOrderById, getOrdersListCurrentUser };

@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import { productList, productDetails } from './reducers/product';
 import { cart } from './reducers/cart';
 import { userLogin, userRegister, userDetails, userUpdate, userList } from './reducers/user';
-import { createOrder } from './reducers/order';
+import { orderCreate, orderDetails, orderListCurrentUser  } from './reducers/order';
 
 const reducers = combineReducers({
   productList,
@@ -15,7 +15,9 @@ const reducers = combineReducers({
   userDetails,
   userUpdate,
   userList,
-  order: createOrder,
+  order: orderCreate,
+  orderDetails,
+  orderList: orderListCurrentUser
 
 });
 
