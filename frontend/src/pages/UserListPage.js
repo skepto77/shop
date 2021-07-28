@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button } from 'react-bootstrap';
-import { getUserList } from '../actions/user';
+import { getUserList, deleteUser } from '../actions/user';
 import Loader from '../componets/Loader';
 import Message from '../componets/Message';
 
@@ -13,6 +13,7 @@ const UserListPage = () => {
   const history = useHistory();
   const { loading, error, users } = useSelector((state) => state.userList);
   const { userInfo } = useSelector((state) => state.user);
+  const { success:successDelete } = useSelector((state) => state.userDelete);
  
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
@@ -21,10 +22,12 @@ const UserListPage = () => {
       setMessage('Доступ запрещен');
       history.push('/login');
     } 
-  },[history, userInfo,  dispatch])
+  },[history, userInfo,  dispatch, successDelete ])
 
   const removeUserHandler = (_id) =>{
-    console.log(_id);
+    if(window.confirm('Вы уверены?')){
+      dispatch(deleteUser(_id));
+    }
   }
 
   return (
@@ -51,9 +54,9 @@ const UserListPage = () => {
               <td>{_id}</td>
               <td>{name}</td>
               <td>{email}</td>
-              <td style={{textAlign: 'center', }}>{isAdmin ? <i class="bi bi-check lg" style={{color: 'green',fontSize: '40px',  }}></i> : ''}</td>
+              <td style={{textAlign: 'center', }}>{isAdmin ? <i className="bi bi-check lg" style={{color: 'green',fontSize: '40px',  }}></i> : ''}</td>
               <td style={{whiteSpace: 'nowrap', }}>
-                <LinkContainer to={`/user/${_id}/edit`}>
+                <LinkContainer to={`/admin/users/${_id}/edit`}>
                   <Button variant="warning"><i className="bi bi-pencil"></i></Button>
                 </LinkContainer>
                 {' '}

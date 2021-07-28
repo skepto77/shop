@@ -18,6 +18,12 @@ import {
   USER_LIST_SUCCESS,
   USER_LIST_FAILURE,
   USER_LIST_RESET,
+  USER_DELETE_REQUEST,
+  USER_DELETE_SUCCESS,
+  USER_DELETE_FAILURE,
+  USER_UPDATE_BY_ID_REQUEST,
+  USER_UPDATE_BY_ID_SUCCESS,
+  USER_UPDATE_BY_ID_FAILURE,
 } from '../constants/user';
 
 const login = (email, password) => async (dispatch) => {
@@ -80,7 +86,7 @@ const register = (name, email, password) => async (dispatch) => {
 };
 
 
-const getUserDetails = () => async (dispatch, getState) => {
+const getUserDetails = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_DETAILS_REQUEST });
 
@@ -92,7 +98,7 @@ const getUserDetails = () => async (dispatch, getState) => {
       }
     }
 
-    const { data } = await axios.get(`/api/users/profile`, config);
+    const { data } = await axios.get(`/api/users/${id}`, config);
 
     dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
 
@@ -157,5 +163,64 @@ const getUserList = () => async (dispatch, getState) => {
   }
 };
 
+const deleteUser = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_DELETE_REQUEST });
 
-export { login, logout, register, getUserDetails, updateUser, getUserList };
+    const { user: { userInfo: { token } } } = getState();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+
+    const data = await axios.delete(`/api/users/${id}`, config);
+
+    dispatch({ type: USER_DELETE_SUCCESS, payload: data });
+
+  } catch (error) {
+    dispatch({ 
+      type:   USER_DELETE_FAILURE, 
+      payload: error.response && error.response.data.message 
+        ? error.response.data.message
+        : error.message
+    });
+  }
+};
+
+const updateUserById = (user) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_UPDATE_BY_ID_REQUEST });
+
+    const { user: { userInfo: { token } } } = getState();
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    }
+
+    const data = await axios.put(`/api/users/${user.id}`, user, config);
+
+    dispatch({ type: USER_UPDATE_BY_ID_SUCCESS, payload: data });
+
+  } catch (error) {
+    dispatch({ 
+      type:   USER_UPDATE_BY_ID_FAILURE, 
+      payload: error.response && error.response.data.message 
+        ? error.response.data.message
+        : error.message
+    });
+  }
+};
+
+export { 
+  login, 
+  logout, 
+  register, 
+  getUserDetails, 
+  updateUser, 
+  getUserList, 
+  deleteUser, 
+  updateUserById 
+};

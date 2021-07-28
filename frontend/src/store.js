@@ -3,7 +3,15 @@ import { combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { productList, productDetails } from './reducers/product';
 import { cart } from './reducers/cart';
-import { userLogin, userRegister, userDetails, userUpdate, userList } from './reducers/user';
+import { 
+  userLogin, 
+  userRegister, 
+  userDetails, 
+  userUpdate, 
+  userList, 
+  userDelete, 
+  userUpdateById 
+} from './reducers/user';
 import { orderCreate, orderDetails, orderListCurrentUser  } from './reducers/order';
 
 const reducers = combineReducers({
@@ -14,6 +22,8 @@ const reducers = combineReducers({
   userRegister,
   userDetails,
   userUpdate,
+  userUpdateById,
+  userDelete,
   userList,
   order: orderCreate,
   orderDetails,

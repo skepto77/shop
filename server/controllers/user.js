@@ -70,6 +70,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 
 });
 
+
 const updateUserProfile = asyncHandler(async (req, res) => {
 
   const user = await User.findById(req.user._id);
@@ -108,4 +109,57 @@ const updateUserProfile = asyncHandler(async (req, res) => {
  
  });
 
-export { authUsers, getUserProfile, createUser, updateUserProfile, getUsers };
+ const deleteUser = asyncHandler(async (req, res) => {
+
+  const user = await User.findById(req.params.id);
+ 
+  if (user) {
+    user.remove();
+    res.json({ message: 'Пользователь удален' });
+  } else {
+    res.status(404);
+    throw new Error('Пользователь не найден');
+  }
+ });
+
+const getUserById = asyncHandler(async (req, res) => {
+    try {
+      const user = await User.findById(req.params.id).select('-password');
+      res.json(user);
+    } catch {
+      res.status(404);
+      throw new Error('Пользователь не найден');
+    }
+});
+
+const updateUserById = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.isAdmin = req.body.isAdmin|| user.isAdmin;
+
+    const updateUser =  await user.save();
+
+    res.json({
+        _id: updateUser._id,
+        name: updateUser.name,
+        email: updateUser.email,
+        isAdmin: updateUser.isAdmin,
+      })
+    } catch {
+      res.status(404);
+      throw new Error('Пользователь не найден');
+    }
+ });
+
+export { authUsers, 
+  getUserProfile, 
+  createUser, 
+  updateUserProfile, 
+  getUsers, 
+  deleteUser,
+  getUserById,
+  updateUserById,
+ };

@@ -15,6 +15,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
 import UserListPage from './pages/UserListPage';
+import UserEditPage from './pages/UserEditPage';
 import PageNotFound from './pages/PageNotFound';
 
 const App = () => {
@@ -35,7 +36,8 @@ const App = () => {
             <Route path="/login"><LoginPage /></Route>
             <Route path="/register"><RegisterPage /></Route>
             <Route path="/profile"><ProfilePage /></Route>
-            <Route path="/admin/users"><UserListPage /></Route>
+            <Route exact path="/admin/users"><UserListPage /></Route>
+            <Route path="/admin/users/:id/edit"><UserEditPage /></Route>
             <Route><PageNotFound /></Route>
            </Switch>
         </Container>
