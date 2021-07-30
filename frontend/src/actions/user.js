@@ -24,6 +24,10 @@ import {
   USER_UPDATE_BY_ID_REQUEST,
   USER_UPDATE_BY_ID_SUCCESS,
   USER_UPDATE_BY_ID_FAILURE,
+  USER_UPDATE_BY_ID_RESET,
+  USER_GET_BY_ID_REQUEST,
+  USER_GET_BY_ID_SUCCESS,
+  USER_GET_BY_ID_FAILURE,
 } from '../constants/user';
 
 const login = (email, password) => async (dispatch) => {
@@ -86,7 +90,7 @@ const register = (name, email, password) => async (dispatch) => {
 };
 
 
-const getUserDetails = (id) => async (dispatch, getState) => {
+const getUserDetails = () => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_DETAILS_REQUEST });
 
@@ -98,7 +102,7 @@ const getUserDetails = (id) => async (dispatch, getState) => {
       }
     }
 
-    const { data } = await axios.get(`/api/users/${id}`, config);
+    const { data } = await axios.get(`/api/users/profile`, config);
 
     dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
 
@@ -188,25 +192,53 @@ const deleteUser = (id) => async (dispatch, getState) => {
   }
 };
 
+
+const getUserById = (id) => async (dispatch, getState) => {
+  try { 
+
+    const { user: { userInfo: { token } } } = getState();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+
+    const { data } = await axios.get(`/api/users/${id}`, config);
+
+    dispatch({ type: USER_GET_BY_ID_SUCCESS, payload: data});
+
+  } catch (error) {
+    dispatch({ 
+      type: USER_GET_BY_ID_FAILURE, 
+      payload: error.response && error.response.data.message 
+        ? error.response.data.message
+        : error.message
+    });
+  }
+};
+
+
 const updateUserById = (user) => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_UPDATE_BY_ID_REQUEST });
 
     const { user: { userInfo: { token } } } = getState();
+
     const config = {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       }
     }
+    const { data } = await axios.put(`/api/users/${user._id}`, user, config);
 
-    const data = await axios.put(`/api/users/${user.id}`, user, config);
-
-    dispatch({ type: USER_UPDATE_BY_ID_SUCCESS, payload: data });
+    dispatch({ type: USER_UPDATE_BY_ID_SUCCESS });
+    dispatch({ type: USER_GET_BY_ID_SUCCESS, payload: data});
+    // dispatch({ type: USER_UPDATE_BY_ID_RESET });
 
   } catch (error) {
     dispatch({ 
-      type:   USER_UPDATE_BY_ID_FAILURE, 
+      type: USER_UPDATE_BY_ID_FAILURE, 
       payload: error.response && error.response.data.message 
         ? error.response.data.message
         : error.message
@@ -222,5 +254,6 @@ export {
   updateUser, 
   getUserList, 
   deleteUser, 
-  updateUserById 
+  updateUserById,
+  getUserById
 };

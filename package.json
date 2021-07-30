@@ -2,7 +2,7 @@
   "name": "shop-mern",
   "proxy": "http://localhost:5000",
   "version": "1.0.0",
-  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "description": "Shop app with React, Node, Express and MongoDB",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/skepto77/shop-mern.git"
+    "url": "git+https://github.com/skepto77/shop.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/skepto77/shop-mern/issues"
+    "url": "https://github.com/skepto77/shop/issues"
   },
-  "homepage": "https://github.com/skepto77/shop-mern#readme",
+  "homepage": "https://github.com/skepto77/shop#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",

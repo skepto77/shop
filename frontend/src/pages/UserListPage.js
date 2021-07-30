@@ -2,7 +2,7 @@ import React, { useState, useEffect }  from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Table, Button } from 'react-bootstrap';
+import { Row, Col, Table, Button } from 'react-bootstrap';
 import { getUserList, deleteUser } from '../actions/user';
 import Loader from '../componets/Loader';
 import Message from '../componets/Message';
@@ -11,6 +11,7 @@ const UserListPage = () => {
   const dispatch = useDispatch();
   const [message, setMessage] = useState(null);
   const history = useHistory();
+  const { goBack } = useHistory();
   const { loading, error, users } = useSelector((state) => state.userList);
   const { userInfo } = useSelector((state) => state.user);
   const { success:successDelete } = useSelector((state) => state.userDelete);
@@ -32,24 +33,29 @@ const UserListPage = () => {
 
   return (
     <>
-    {loading && <Loader />} 
-    {message &&  <Message text={message} variant={'danger'}/>}
-    {error &&  <Message text={error} variant={'danger'}/>}
-
-        <Table striped bordered hover variant="light">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Имя</th>
-              <th>Email</th>
-              <th>Администратор</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
+      <Row className='justify-content-md-center text-center'>
+        <Col md={12} xs={12}>
+          <button className="btn btn-light" onClick={goBack}>назад</button>
+          <h3 className="mt-5 mb-5">Список пользователей</h3>
+        </Col>
+      </Row>
+      {loading && <Loader />} 
+      {message &&  <Message text={message} variant={'danger'}/>}
+      {error &&  <Message text={error} variant={'danger'}/>}
+      <Table striped bordered hover variant="light">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Имя</th>
+            <th>Email</th>
+            <th>Администратор</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
           {users && users.map((user) => {
-           const {_id, name, email, isAdmin} = user;
-           return (
+            const {_id, name, email, isAdmin} = user;
+            return (
             <tr key={_id}>
               <td>{_id}</td>
               <td>{name}</td>
@@ -65,11 +71,8 @@ const UserListPage = () => {
             </tr>
           )
           })}
-
-
-          </tbody>
-          </Table>
-
+        </tbody>
+      </Table>
     </>
   );
 };

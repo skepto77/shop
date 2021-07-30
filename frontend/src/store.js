@@ -10,6 +10,7 @@ import {
   userUpdate, 
   userList, 
   userDelete, 
+  userDetailsById,
   userUpdateById 
 } from './reducers/user';
 import { orderCreate, orderDetails, orderListCurrentUser  } from './reducers/order';
@@ -22,6 +23,7 @@ const reducers = combineReducers({
   userRegister,
   userDetails,
   userUpdate,
+  userDetailsById,
   userUpdateById,
   userDelete,
   userList,

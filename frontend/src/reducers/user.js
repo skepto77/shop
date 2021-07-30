@@ -23,6 +23,10 @@ import {
   USER_UPDATE_BY_ID_REQUEST,
   USER_UPDATE_BY_ID_SUCCESS,
   USER_UPDATE_BY_ID_FAILURE,
+  USER_UPDATE_BY_ID_RESET,
+  USER_GET_BY_ID_REQUEST,
+  USER_GET_BY_ID_SUCCESS,
+  USER_GET_BY_ID_FAILURE,
 
 } from '../constants/user';
 
@@ -166,7 +170,29 @@ const userDelete = (state = {}, { type, payload }) => {
   }
 };
 
-const userUpdateById = (state = {}, { type, payload }) => {
+const userDetailsById = (state = { user: {} }, { type, payload }) => {
+  switch (type) {
+    case USER_GET_BY_ID_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case USER_GET_BY_ID_SUCCESS:
+      return { 
+        user: payload,
+        loading: false,
+      };
+    case USER_GET_BY_ID_FAILURE:
+      return {
+        error: payload,
+        loading: false,
+      };
+    default:
+      return state;
+  }
+};
+
+const userUpdateById = (state = {user: {}}, { type, payload }) => {
   switch (type) {
     case USER_UPDATE_BY_ID_REQUEST:
       return {
@@ -174,13 +200,17 @@ const userUpdateById = (state = {}, { type, payload }) => {
       };
     case USER_UPDATE_BY_ID_SUCCESS:
       return { 
-        user: payload,
+        success: true,
         loading: false,
       };
     case USER_UPDATE_BY_ID_FAILURE:
       return {
         error: payload,
         loading: false,
+      };
+    case USER_UPDATE_BY_ID_RESET:
+      return {
+        user: {},
       };
     default:
       return state;
@@ -194,5 +224,6 @@ export {
   userUpdate, 
   userList, 
   userDelete, 
+  userDetailsById,
   userUpdateById 
 };
