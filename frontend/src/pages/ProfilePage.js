@@ -8,7 +8,7 @@ import { getOrderListCurrentUser } from '../actions/order';
 import Loader from '../componets/Loader';
 import Message from '../componets/Message';
 
-const LoginPage = () => {
+const ProfilePage = () => {
   const dispatch = useDispatch();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -17,7 +17,7 @@ const LoginPage = () => {
   const [message, setMessage] = useState(null);
   const [messageSuccess, setMessageSuccess] = useState(null);
   const history = useHistory();
-  const { loading, error, user } = useSelector((state) => state.userDetails);
+  const { loading: loadingUserDetails, error, user } = useSelector((state) => state.userDetails);
   const { userInfo } = useSelector((state) => state.user);
   const { loading: loadingOrders, error: errorOrders, orders } = useSelector((state) => state.orderList);
 
@@ -51,12 +51,12 @@ const LoginPage = () => {
 
   return (
     <>
-    {loading && <Loader />} 
     {message &&  <Message variant={'danger'}>{message}</Message>}
     {error && <Message variant={'danger'}>{error}</Message>}
     {messageSuccess && !message &&  <Message variant={'success'}>{messageSuccess}</Message>}
       <Row className='mt-5 justify-content-md-center'>
         <Col md={3} xs={12}>
+          {loadingUserDetails && <Loader />} 
           <Form onSubmit={submitHandler}>
           <Form.Group controlId="name">
               <Form.Label>Имя</Form.Label>
@@ -127,8 +127,8 @@ const LoginPage = () => {
                 <td>{_id}</td>
                 <td>{createdAt.substring(0, 10)}</td>
                 <td>{totalPrice}</td>
-                <td>{!isPaid ? <i class="bi bi-x lg" style={{color: 'red',fontSize: '40px',  }}></i> : <i className="bi bi-check lg" style={{color: 'green',fontSize: '40px',  }}></i>}</td>
-                <td>{!isDelivered? <i class="bi bi-x lg" style={{color: 'red',fontSize: '40px',  }}></i> : <i className="bi bi-check lg" style={{color: 'green',fontSize: '40px',  }}></i>}</td>
+                <td>{!isPaid ? <i className="bi bi-x lg" style={{color: 'red',fontSize: '40px',  }}></i> : <i className="bi bi-check lg" style={{color: 'green',fontSize: '40px',  }}></i>}</td>
+                <td>{!isDelivered? <i className="bi bi-x lg" style={{color: 'red',fontSize: '40px',  }}></i> : <i className="bi bi-check lg" style={{color: 'green',fontSize: '40px',  }}></i>}</td>
                 <td>
                 <LinkContainer to={`/order/${_id}`}>
                   <Button variant="light" size="lg" >подробности</Button>
@@ -146,4 +146,4 @@ const LoginPage = () => {
     </>
   );
 };
-export default LoginPage;
+export default ProfilePage;
