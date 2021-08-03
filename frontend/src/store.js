@@ -13,7 +13,14 @@ import {
   userDetailsById,
   userUpdateById 
 } from './reducers/user';
-import { orderCreate, orderDetails, orderListCurrentUser  } from './reducers/order';
+import { 
+  orderCreate, 
+  orderDetails, 
+  orderListCurrentUser, 
+  orderList,
+  orderPay,
+  orderDeliver,
+} from './reducers/order';
 
 const reducers = combineReducers({
   productList,
@@ -29,7 +36,10 @@ const reducers = combineReducers({
   userList,
   order: orderCreate,
   orderDetails,
-  orderList: orderListCurrentUser
+  orderListAllUsers: orderList,
+  orderList: orderListCurrentUser,
+  orderPay,
+  orderDeliver,
 
 });
 

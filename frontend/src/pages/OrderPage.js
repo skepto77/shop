@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Row, Col, Table, Card, Image, ListGroup  } from 'react-bootstrap';
+import { Row, Col, Table, Card, Image, ListGroup, Button, Alert } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import { getOrderDetails } from '../actions/order';
+import { getOrderDetails, updateOrderAsPaid, updateOrderAsDelivered } from '../actions/order';
 import Loader from '../componets/Loader';
 import Message from '../componets/Message';
 
@@ -10,11 +10,24 @@ import Message from '../componets/Message';
 const OrderPage = () => {
   const dispatch = useDispatch();
   const { order, loading, error } = useSelector((state) => state.orderDetails);
+  const { error: userError, userInfo } = useSelector((state) => state.user);
+  const { success: successDeliver } = useSelector((state) => state.orderDeliver);
+  const { success: successPay } = useSelector((state) => state.orderPay);
   const { id } = useParams();
+
   useEffect(() => {
     dispatch(getOrderDetails(id));
-  }, [dispatch, id]);
+  }, [dispatch, id, successDeliver, successPay]);
   
+  const handlerPay = () => {
+    dispatch(updateOrderAsPaid(order));
+  }
+
+  const handlerDeliver = () => {
+    console.log('deliver')
+    dispatch(updateOrderAsDelivered(order));
+  }
+
   return (
     <>
       {loading 
@@ -38,16 +51,37 @@ const OrderPage = () => {
                           <p>Имя: {order.user.name}</p>
                           <p>e-mail: {order.user.email}</p>
                           <p>Адрес: {Object.values(order.shippingAddress).join(', ')}</p> 
-                          <p>{!order.isDelivered && <span style={{color: 'red'}}>не доставлен</span>}</p>
+                          <Alert variant={order.isDelivered ? "success" : "danger"}>
+                            <Alert.Heading>{order.isDelivered ? "Доставлен" : "Не доставлен"}</Alert.Heading>
+                            {order.isDelivered &&  (
+                              <>
+                                <hr/>
+                                <p>
+                                  Дата доставки: {order.deliveredAt.substring(0, 10)}
+                                </p>
+                              </>
+                            )}
+                          </Alert>
                         </Col>
                       </Row>
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <Row>
                         <Col>
-                          <h3>Способ оплаты:</h3>
-                          <p>{order.paymentMethod}</p>
-                          <p>{!order.isPaid && <span style={{color: 'red'}}>не оплачен</span>}</p>
+                          <h3>Оплата:</h3>
+                            <Alert variant={order.isPaid ? "success" : "danger"}>
+                              <Alert.Heading>{order.isPaid ? "Оплачен" : "Не оплачен"}</Alert.Heading>
+                              <hr />
+                              <h5>Способ оплаты:</h5>
+                              <p>{order.paymentMethod}</p>
+                              {order.isPaid && ( 
+                                <>
+                                  <hr />
+                                  <h5>Дата оплаты</h5>
+                                  <p>{order.paidAt.substring(0, 10)}</p>
+                                </>
+                              )} 
+                            </Alert>
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -111,6 +145,12 @@ const OrderPage = () => {
                           </Col>
                         </Row>
                       </ListGroup.Item>
+                      {userInfo.isAdmin && (
+                      <ListGroup.Item>
+                        <Button variant="success" size="lg" className="btn btn-block" onClick={handlerPay}>Ометить оплаченным</Button>
+                        <Button variant="success" size="lg" className="btn btn-block" onClick={handlerDeliver}>Отметить доставленным</Button>
+                      </ListGroup.Item>
+                      )}
                     </ListGroup>
                 </Card>  
                 </Col>

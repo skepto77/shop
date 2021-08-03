@@ -8,6 +8,15 @@ import {
   ORDER_LIST_CURRENT_USER_REQUEST,
   ORDER_LIST_CURRENT_USER_SUCCESS,
   ORDER_LIST_CURRENT_USER_FAILURE,
+  ORDER_LIST_REQUEST,
+  ORDER_LIST_SUCCESS,
+  ORDER_LIST_FAILURE,
+  ORDER_PAY_REQUEST,
+  ORDER_PAY_SUCCESS,
+  ORDER_PAY_FAILURE,
+  ORDER_DELIVER_REQUEST,
+  ORDER_DELIVER_SUCCESS,
+  ORDER_DELIVER_FAILURE,
 } from '../constants/order';
 
 const orderCreate = (state = {}, { type, payload }) => {
@@ -76,4 +85,76 @@ const orderListCurrentUser = (state = {orders: []}, { type, payload }) => {
   }
 };
 
-export { orderCreate, orderDetails, orderListCurrentUser };
+const orderList = (state = {orders: []}, { type, payload }) => {
+  switch (type) {
+    case ORDER_LIST_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ORDER_LIST_SUCCESS:
+      return { 
+        orders: payload,
+        loading: false,
+      };
+    case ORDER_LIST_FAILURE:
+      return {
+        error: payload,
+        loading: false,
+      };
+    default:
+      return state;
+  }
+};
+
+
+const orderPay = (state = {order: {}}, { type, payload }) => {
+  switch (type) {
+    case ORDER_PAY_REQUEST:
+      return {
+        loading: true,
+      };
+    case ORDER_PAY_SUCCESS:
+      return { 
+        success: true,
+        loading: false,
+      };
+    case ORDER_PAY_FAILURE:
+      return {
+        error: payload,
+        loading: false,
+      };
+    default:
+      return state;
+  }
+};
+
+const orderDeliver = (state = {order: {}}, { type, payload }) => {
+  switch (type) {
+    case ORDER_DELIVER_REQUEST:
+      return {
+        loading: true,
+      };
+    case ORDER_DELIVER_SUCCESS:
+      return { 
+        success: true,
+        loading: false,
+      };
+    case ORDER_DELIVER_FAILURE:
+      return {
+        error: payload,
+        loading: false,
+      };
+    default:
+      return state;
+  }
+};
+
+export { 
+  orderCreate, 
+  orderDetails, 
+  orderListCurrentUser, 
+  orderList, 
+  orderPay, 
+  orderDeliver 
+};

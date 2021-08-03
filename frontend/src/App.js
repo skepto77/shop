@@ -11,6 +11,7 @@ import DeliveryPage from './pages/DeliveryPage';
 import PaymentPage from './pages/PaymentPage';
 import PlaceOrderPage from './pages/PlaceOrderPage';
 import OrderPage from './pages/OrderPage';
+import OrderListPage from './pages/OrderListPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
@@ -38,6 +39,7 @@ const App = () => {
             <Route path="/profile"><ProfilePage /></Route>
             <Route exact path="/admin/users"><UserListPage /></Route>
             <Route path="/admin/users/:id/edit"><UserEditPage /></Route>
+            <Route path="/admin/orders/"><OrderListPage /></Route>
             <Route><PageNotFound /></Route>
            </Switch>
         </Container>

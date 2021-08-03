@@ -30,8 +30,6 @@ const createOrder = asyncHandler(async (req, res) => {
 const getOrderById = asyncHandler(async (req, res) => {
   try {
     const order = await Order.findById(req.params.id).populate('user', 'name email');
-    // console.log(req.params.id, req.user._id)
-    // console.log(typeof order.user._id, typeof req.user._id)
     if (order.user._id.toString() === req.user._id.toString() || req.user.isAdmin) {
       res.status(201).json(order);
       return;
@@ -39,7 +37,7 @@ const getOrderById = asyncHandler(async (req, res) => {
     res.status(500).json({ message: `Нет прав для просмотра заказа` })
     
   } catch (err) {
-    res.status(404).json({ message: `Заказ не найден` })
+    res.status(404).json({ message: `Заказ не найден Details: ${err}` })
    }
 });
 
@@ -52,4 +50,55 @@ const getOrdersListCurrentUser = asyncHandler(async (req, res) => {
    }
 });
 
-export { createOrder, getOrderById, getOrdersListCurrentUser };
+const getOrdersList = asyncHandler(async (req, res) => {
+  try {
+    const orders = await Order.find({}).populate('user', 'name');
+    res.json(orders);
+  } catch (err) {
+    res.status(404).json({ message: `Заказы не найдены` })
+   }
+});
+
+
+
+
+const updateOrderAsPaid = asyncHandler(async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if(order) {
+      order.isPaid = true;
+      order.paidAt = Date.now();
+    }
+    const updatedOrder = await order.save();
+    res.status(201).json(updatedOrder);
+    
+  } catch (err) {
+    console.log(err)
+    res.status(404).json({ message: `Заказ не найден Details: ${err}` })
+   }
+});
+
+const updateOrderAsDelivered = asyncHandler(async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if(order) {
+      order.isDelivered = true;
+      order.deliveredAt = Date.now();
+    }
+    const updatedOrder = await order.save();
+    res.status(201).json(updatedOrder);
+    
+  } catch (err) {
+    console.log(err)
+    res.status(404).json({ message: `Заказ не найден Details: ${err}` })
+   }
+});
+
+export { 
+  createOrder, 
+  getOrderById, 
+  getOrdersListCurrentUser, 
+  getOrdersList,
+  updateOrderAsPaid,
+  updateOrderAsDelivered };
+
