@@ -18,6 +18,7 @@ import ProfilePage from './pages/ProfilePage';
 import UserListPage from './pages/UserListPage';
 import UserEditPage from './pages/UserEditPage';
 import PageNotFound from './pages/PageNotFound';
+import SearchPage from './pages/SearchPage';
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
         <Container>
           <Switch>
             <Route exact path="/"><HomePage /></Route>
+            <Route path="/search"><SearchPage /></Route>
             <Route path="/product/:id"><ProductPage /></Route>
             <Route path="/cart"><CartPage /></Route>
             <Route path="/shipping"><ShippingPage /></Route>

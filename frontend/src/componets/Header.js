@@ -1,7 +1,9 @@
 import React from 'react';
+// import Route from 'react-router-dom';
 import { Navbar, Nav, Container, Dropdown} from 'react-bootstrap';
 import { LinkContainer} from 'react-router-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import Search from './Search';
 import { logout } from '../actions/user';
 
 const Header = () => {
@@ -15,6 +17,7 @@ const Header = () => {
   }
 
   return (
+    <>
     <header className="mb-5 bg-white">
       <Navbar variant="light" className="bg-white shadow-sm">
         <Container>
@@ -87,6 +90,8 @@ const Header = () => {
         </Container>
       </Navbar>
     </header>
+    <Search />
+    </>
   )
 };
 
