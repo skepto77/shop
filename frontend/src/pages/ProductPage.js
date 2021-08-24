@@ -5,6 +5,7 @@ import { Row, Col, Image, Button, Tabs, Tab  } from 'react-bootstrap';
 import Rating from '../componets/Rating';
 import Loader from '../componets/Loader';
 import Message from '../componets/Message';
+import Meta from '../componets/Meta';
 import { getProductDetails } from '../actions/product';
 import { addToCart } from '../actions/cart';
 
@@ -32,6 +33,7 @@ const ProductPage = () => {
   
   return (
     <>
+
       {loading 
           ? <Loader /> 
           : error 
@@ -43,6 +45,7 @@ const ProductPage = () => {
               <Image src={product.images[0].url} variant='top' alt={product.title} fluid className="rounded"/>
             </Col>
             <Col md={8}>
+              <Meta title={product.title} description={product.description}/>
               <h3>{product.title}</h3>
               <Rating value={product.rating} text={` ${reviews} отзывов`}/>
               <h2>{product.price} &#8381;</h2>
