@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Col, Row, CardGroup } from 'react-bootstrap';
 import Product from '../componets/Product';
 import Loader from '../componets/Loader';
+import Meta from '../componets/Meta';
 import { getProductsList } from '../actions/product';
 
 const HomePage = () => {
@@ -15,6 +16,7 @@ const HomePage = () => {
 
   return (
     <>
+      <Meta />
       <h1>Test Products</h1>
       { loading 
       ? <Loader />
