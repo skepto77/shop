@@ -30,8 +30,13 @@ const SearchPage = () => {
   return (
     <>
       <Meta />
-      {keyword ? <h3>По запросу {keyword} {declOfWords(countOfProducts, ['найден', 'найдено', 'найдено'])}  {countOfProducts} {declOfWords(countOfProducts, ['товар', 'товара', 'товаров'])}</h3>
-        : <h3>Поиск по сайту</h3>}
+      {keyword 
+        ? <h3>По запросу {keyword} {declOfWords(countOfProducts, ['найден', 'найдено', 'найдено'])}  {countOfProducts} {declOfWords(countOfProducts, ['товар', 'товара', 'товаров'])}</h3>
+        : <>
+          <h3>Поиск по сайту</h3>
+          <p> Введите поисковый запрос</p>
+          </>
+      }
       { loading 
       ? <Loader />
       : error 
@@ -47,7 +52,7 @@ const SearchPage = () => {
               ))}
             </CardGroup>
           </Row>
-          <Paginate pages={pages} page={page} keyword={keyword}/>
+          {keyword && <Paginate pages={pages} page={page} keyword={keyword}/> }
           </>
           )
       }
