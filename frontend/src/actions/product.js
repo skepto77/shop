@@ -8,11 +8,11 @@ import {
   PRODUCT_DETAILS_FAILURE,
 } from '../constants/product';
 
-const getProductsList = (keyword = '') => async (dispatch) => {
+const getProductsList = (keyword = '', pageNumber = '') => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_LIST_REQUEST, payload: [] });
 
-    const { data } = await axios(`/api/product?keyword=${keyword}`);
+    const { data } = await axios(`/api/product?keyword=${keyword}&pageNumber=${pageNumber}`);
 
     dispatch({ type:   PRODUCT_LIST_SUCCESS, payload: data });
   } catch (error) {

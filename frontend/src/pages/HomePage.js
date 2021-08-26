@@ -1,18 +1,22 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { Col, Row, CardGroup } from 'react-bootstrap';
 import Product from '../componets/Product';
 import Loader from '../componets/Loader';
+import Paginate from '../componets/Paginate';
 import Meta from '../componets/Meta';
 import { getProductsList } from '../actions/product';
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const {loading, error, products} = useSelector((state) => state.productList);
+  const {loading, error, products, pages, page} = useSelector((state) => state.productList);
+
+  const { pageNumber } = useParams();
 
   useEffect(() => {
-    dispatch(getProductsList());
-  }, [dispatch]);
+    dispatch(getProductsList('', pageNumber));
+  }, [dispatch, pageNumber]);
 
   return (
     <>
@@ -23,6 +27,7 @@ const HomePage = () => {
       : error 
         ? (<h1>{error}</h1>)
         : (
+          <>
           <Row>
             <CardGroup>
               {products.map((product) => (
@@ -32,6 +37,8 @@ const HomePage = () => {
               ))}
             </CardGroup>
           </Row>
+          <Paginate pages={pages} page={page} />
+          </>
           )
       }
     </>

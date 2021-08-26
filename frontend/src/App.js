@@ -28,7 +28,9 @@ const App = () => {
         <Container>
           <Switch>
             <Route exact path="/"><HomePage /></Route>
-            <Route path="/search"><SearchPage /></Route>
+            <Route exact path="/page/:pageNumber"><HomePage /></Route>
+            <Route exact path="/search"><SearchPage /></Route>
+            <Route path="/search/page/:pageNumber"><SearchPage /></Route>
             <Route path="/product/:id"><ProductPage /></Route>
             <Route path="/cart"><CartPage /></Route>
             <Route path="/shipping"><ShippingPage /></Route>
@@ -41,7 +43,8 @@ const App = () => {
             <Route path="/profile"><ProfilePage /></Route>
             <Route exact path="/admin/users"><UserListPage /></Route>
             <Route path="/admin/users/:id/edit"><UserEditPage /></Route>
-            <Route path="/admin/orders/"><OrderListPage /></Route>
+            <Route exact path="/admin/orders/"><OrderListPage /></Route>
+            <Route path="/admin/orders/page/:pageNumber"><OrderListPage /></Route>
             <Route><PageNotFound /></Route>
            </Switch>
         </Container>

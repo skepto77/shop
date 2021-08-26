@@ -17,7 +17,10 @@ const productList = (state = { products: [] }, { type, payload }) => {
       };
     case PRODUCT_LIST_SUCCESS:
       return { 
-        products: payload,
+        products: payload.products,
+        countOfProducts: payload.countOfProducts,
+        pages: payload.pages,
+        page: payload.page,
         loading: false,
       };
     case PRODUCT_LIST_FAILURE:

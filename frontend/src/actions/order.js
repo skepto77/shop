@@ -100,7 +100,7 @@ const getOrderListCurrentUser = () => async (dispatch, getState) => {
   }
 };
 
-const getOrderList = () => async (dispatch, getState) => {
+const getOrderList = (pageNumber = '') => async (dispatch, getState) => {
   try {
     dispatch({ type: ORDER_LIST_REQUEST });
     
@@ -112,7 +112,7 @@ const getOrderList = () => async (dispatch, getState) => {
       }
     }
 
-    const { data } = await axios.get(`/api/orders/`, config);
+    const { data } = await axios.get(`/api/orders/?pageNumber=${pageNumber}`, config);
 
     dispatch({ type: ORDER_LIST_SUCCESS, payload: data });
 

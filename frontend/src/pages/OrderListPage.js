@@ -1,26 +1,29 @@
 import React, { useEffect }  from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { Row, Col, Button, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { getOrderList } from '../actions/order';
 import Loader from '../componets/Loader';
 import Message from '../componets/Message';
+import Paginate from '../componets/Paginate';
 
 const OrderListPage = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { goBack } = useHistory();
   const { error, userInfo } = useSelector((state) => state.user);
-  const { error: errorOrder, orders, loading} = useSelector((state) => state.orderListAllUsers);
-
+  const { error: errorOrder, orders, loading, pages, page} = useSelector((state) => state.orderListAllUsers);
+  
+  const { pageNumber } = useParams();
+  
   useEffect(() => {
     if (!userInfo && !userInfo.isAdmin) {
       history.push('/login');
     } else {
-    dispatch(getOrderList())
+    dispatch(getOrderList(pageNumber))
     };
-  }, [dispatch, userInfo, history]);
+  }, [dispatch, userInfo, history, pageNumber]);
 
   return (
     <>
@@ -77,6 +80,7 @@ const OrderListPage = () => {
             )}
         </Col>
       </Row>
+      <Paginate pages={pages} page={page}/>
 
     </>
   );

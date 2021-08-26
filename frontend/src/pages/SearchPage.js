@@ -1,23 +1,26 @@
 import React, { useEffect } from 'react';
-import {useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Row, CardGroup } from 'react-bootstrap';
 import Product from '../componets/Product';
 import Loader from '../componets/Loader';
 import Meta from '../componets/Meta';
+import Paginate from '../componets/Paginate';
 import { getProductsList } from '../actions/product';
 
 const SearchPage = () => {
   const dispatch = useDispatch();
-  const {loading, error, products} = useSelector((state) => state.productList);
+  const {loading, error, products, countOfProducts, pages, page} = useSelector((state) => state.productList);
 
   const location = useLocation();
 
   const keyword = location.search ? location.search.split('?text=')[1].trim() : '';
 
+  const { pageNumber } = useParams();
+
   useEffect(() => {
-    dispatch(getProductsList(keyword));
-  }, [dispatch, keyword]);
+    dispatch(getProductsList(keyword, pageNumber));
+  }, [dispatch, keyword, pageNumber]);
 
   const declOfWords = (number, titles) => {
     const cases = [2, 0, 1, 1, 1, 2]
@@ -27,13 +30,14 @@ const SearchPage = () => {
   return (
     <>
       <Meta />
-      {keyword ? <h3>По запросу {keyword} {declOfWords(products.length, ['найден', 'найдено', 'найдено'])}  {products.length} {declOfWords(products.length, ['товар', 'товара', 'товаров'])}</h3>
+      {keyword ? <h3>По запросу {keyword} {declOfWords(countOfProducts, ['найден', 'найдено', 'найдено'])}  {countOfProducts} {declOfWords(countOfProducts, ['товар', 'товара', 'товаров'])}</h3>
         : <h3>Поиск по сайту</h3>}
       { loading 
       ? <Loader />
       : error 
         ? (<h1>{error}</h1>)
         : (
+          <>
           <Row>
             <CardGroup>
               {keyword && products.map((product) => (
@@ -43,6 +47,8 @@ const SearchPage = () => {
               ))}
             </CardGroup>
           </Row>
+          <Paginate pages={pages} page={page} keyword={keyword}/>
+          </>
           )
       }
     </>

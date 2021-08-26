@@ -94,7 +94,9 @@ const orderList = (state = {orders: []}, { type, payload }) => {
       };
     case ORDER_LIST_SUCCESS:
       return { 
-        orders: payload,
+        orders: payload.orders,
+        pages: payload.pages,
+        page: payload.page,
         loading: false,
       };
     case ORDER_LIST_FAILURE:
