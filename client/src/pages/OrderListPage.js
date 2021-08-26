@@ -56,7 +56,6 @@ const OrderListPage = () => {
             <tbody>
         
           {orders && orders
-            .sort((a, b) =>  Date.parse(b.createdAt) - Date.parse(a.createdAt))
             .map((item, index) => {
             const {_id, user, createdAt, totalPrice, isPaid, isDelivered} = item;
             return (

@@ -55,7 +55,7 @@ const getOrdersList = asyncHandler(async (req, res) => {
   const page = Number(req.query.pageNumber) || 1;
   try {
     const countOfOrders = await Order.count({});
-    const orders = await Order.find({}).populate('user', 'name').skip(pageSize * (page - 1)).limit(pageSize);
+    const orders = await Order.find({}).populate('user', 'name').sort({createdAt: -1}).skip(pageSize * (page - 1)).limit(pageSize);
     res.json({ orders, countOfOrders, pages: Math.ceil(countOfOrders/ pageSize), page});
   } catch (err) {
     res.status(404).json({ message: `Заказы не найдены` })
