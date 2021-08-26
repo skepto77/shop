@@ -1,6 +1,6 @@
 import React, { useState, useEffect }  from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useHistory, Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { register } from '../actions/user';
 import Loader from '../componets/Loader';

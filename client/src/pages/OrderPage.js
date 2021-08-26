@@ -10,7 +10,7 @@ import Message from '../componets/Message';
 const OrderPage = () => {
   const dispatch = useDispatch();
   const { order, loading, error } = useSelector((state) => state.orderDetails);
-  const { error: userError, userInfo } = useSelector((state) => state.user);
+  const { userInfo } = useSelector((state) => state.user);
   const { success: successDeliver } = useSelector((state) => state.orderDeliver);
   const { success: successPay } = useSelector((state) => state.orderPay);
   const { id } = useParams();
