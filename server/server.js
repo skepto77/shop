@@ -1,5 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import morgan from 'morgan';
+import * as fs from 'fs';
+import { fileURLToPath } from 'url';
+import { join, dirname} from 'path';
 import connectDB from './config/db.js';
 import productRoutes from './routes/product.js';
 import userRoutes from './routes/user.js';
@@ -11,6 +15,12 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const accessLogStream = fs.createWriteStream(join(__dirname, 'access.log'), { flags: 'a' });
+ 
+app.use(morgan('combined', { stream: accessLogStream }));
 
 app.use(express.json());
 
