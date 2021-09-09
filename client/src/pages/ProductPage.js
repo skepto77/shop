@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, Link } from 'react-router-dom';
-import { Row, Col, Image, Button, Tabs, Tab, Form, ListGroup, ListGroupItem} from 'react-bootstrap';
+import { Row, Col, Image, Button, Tabs, Tab, Form, ListGroup, ListGroupItem, Spinner} from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import Rating from '../componets/Rating';
 import Loader from '../componets/Loader';
 import Message from '../componets/Message';
 import Meta from '../componets/Meta';
+import Popup from '../componets/Popup';
 import { getProductDetails, createProductReview } from '../actions/product';
 import { addToCart } from '../actions/cart';
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/product';
@@ -29,6 +30,7 @@ const ProductPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('description');
   const [message, setMessage] = useState('');
+  const [popupShow, setPopupShow] = useState(false);
 
   useEffect(() => {
     if(successCreateReview) {
@@ -43,10 +45,20 @@ const ProductPage = () => {
 
   const handlerAddToCart = (id, quantity) => {
     dispatch(addToCart(id, quantity));
+    setPopupShow(true);
   }
 
+
+
+ 
   return (
     <>
+      <Popup 
+        show={popupShow} 
+        onHide={() => setPopupShow(false)} 
+        header={'Товар добавлен в корзину'} 
+        content={`«${product.title}»`}
+      />
       {(loading || loadingCreateReview)
           ? <Loader /> 
           : error 
@@ -113,10 +125,12 @@ const ProductPage = () => {
                 <Formik
                   validationSchema={schema}
                   onSubmit={(values, actions) => {
-                    dispatch(createProductReview(id, values));
-                    actions.setSubmitting(false);
-                    actions.resetForm({});
-                    setActiveTab('reviews');
+                    setTimeout(() => {
+                      dispatch(createProductReview(id, values));
+                      actions.setSubmitting(false);
+                      actions.resetForm({});
+                      setActiveTab('reviews');
+                    }, 1000);
                   }}
                   initialValues={{
                     rating: 0,
@@ -176,7 +190,18 @@ const ProductPage = () => {
                     />
                     <Form.Control.Feedback type="invalid" tooltip>{errors.comment}</Form.Control.Feedback>
                   </Form.Group>
-                  <Button type="submit" disabled={!(dirty && isValid) || isSubmitting}>Добавить отзыв</Button>
+                  <Button 
+                    type="submit" 
+                    disabled={!(dirty && isValid) || isSubmitting}
+                  >
+                  {isSubmitting && <Spinner
+                    as="span"
+                    animation="grow"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />} Добавить отзыв
+                  </Button>
                   </Form>
                   )}
                 </Formik> 
@@ -189,6 +214,8 @@ const ProductPage = () => {
             </Row>
         </>
       )}
+
+
     </>
   );
 };
