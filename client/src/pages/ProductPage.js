@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, Link } from 'react-router-dom';
-import { Row, Col, Image, Button, Tabs, Tab, Form,  ListGroup, ListGroupItem} from 'react-bootstrap';
+import { Row, Col, Image, Button, Tabs, Tab, Form, ListGroup, ListGroupItem} from 'react-bootstrap';
+import { Formik } from 'formik';
+import * as yup from 'yup';
 import Rating from '../componets/Rating';
 import Loader from '../componets/Loader';
 import Message from '../componets/Message';
@@ -10,6 +12,10 @@ import { getProductDetails, createProductReview } from '../actions/product';
 import { addToCart } from '../actions/cart';
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/product';
 
+const schema = yup.object().shape({
+  rating: yup.string().matches(/^[1-5]*$/, 'Оцените товар').required(),
+  comment: yup.string().min(10, 'Длина отзыва должна быть минимум 10 символов').required('Введите отзыв'),
+});
 
 const ProductPage = () => {
   const dispatch = useDispatch();
@@ -22,15 +28,11 @@ const ProductPage = () => {
 
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('description');
-  const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('');
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     if(successCreateReview) {
-      setActiveTab('reviews');
-      alert('Ваш отзыв добавлен');
-      setRating(0);
-      setComment('');
+      setMessage('Ваш отзыв добавлен');
     }
     dispatch(getProductDetails(id));
     return () => {
@@ -43,14 +45,9 @@ const ProductPage = () => {
     dispatch(addToCart(id, quantity));
   }
 
-  const handlerSubmitReview = (e) => {
-    e.preventDefault();
-    dispatch(createProductReview(id, { rating, comment }));
-  };
-
   return (
     <>
-      {loading 
+      {(loading || loadingCreateReview)
           ? <Loader /> 
           : error 
             ? (<h3><Message variant={'danger'}>{error}</Message></h3>)
@@ -80,7 +77,7 @@ const ProductPage = () => {
           </Row>
           <Row  className='mt-5'>
             <Col md={12}>
-            <Tabs defaultActiveKey={activeTab} id="uncontrolled-tab-example">
+            <Tabs id="controlled-tab" activeKey={activeTab} onSelect={(key) => setActiveTab(key)} >
               <Tab eventKey="description" title="О товаре"  >
                 <p className='mt-4'>{product.description}</p>
               </Tab>
@@ -100,10 +97,9 @@ const ProductPage = () => {
                 })}
               </Tab>
               <Tab eventKey="reviews" title="Отзывы">
-              {loadingCreateReview && <Loader />}
               {product.reviews.length === 0 && <Message variant={'info'}>Отзывов пока нет</Message>}
               {errorCreateReview && <Message variant={'danger'}>{errorCreateReview}</Message>}
-              {successCreateReview && <Message variant={'success'}>Отзыв добавлен</Message>}
+              {message && <Message variant={'success'}>{message}</Message>}
               <ListGroup variant="flush">
                 {product.reviews.map((review, i) => (
                   <ListGroupItem key={i}>
@@ -114,32 +110,76 @@ const ProductPage = () => {
               ))}
               <ListGroupItem>
               {userInfo ? (
-                <Form onSubmit={handlerSubmitReview}>
-                <Form.Group controlId="rating">
-                  <Form.Label>Рейтинг товара</Form.Label>
-                  <Form.Control as="select"  value={rating} onChange={(e)=>setRating(e.target.value)} style={{background: 'rgba(0, 0, 0, 0.02)'}}>
-                    <option>Выберите оценку...</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="3">4</option>
-                    <option value="3">5</option>
-                  </Form.Control>
-                </Form.Group>
-                <Form.Group controlId="comment">
-                  <Form.Label>Отзыв</Form.Label>
-                  <Form.Control 
-                    as="textarea"
-                    placeholder="Ваш отзыв" 
-                    value={comment}
-                    onChange={(e)=>setComment(e.target.value)}  
-                    row="5"
-                  />
-                </Form.Group>
-                <Button variant="primary" type="submit">
-                  Добавить отзыв
-                </Button>
-              </Form>
+                <Formik
+                  validationSchema={schema}
+                  onSubmit={(values, actions) => {
+                    dispatch(createProductReview(id, values));
+                    actions.setSubmitting(false);
+                    actions.resetForm({});
+                    setActiveTab('reviews');
+                  }}
+                  initialValues={{
+                    rating: 0,
+                    comment: '',
+                  }}
+                  >
+                  {({
+                    handleSubmit,
+                    handleChange,
+                    values,
+                    touched,
+                    isValid,
+                    dirty,
+                    isSubmitting,
+                    errors,
+                  }) => (
+                    <Form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleSubmit();
+                    }}
+                    className="comment-form"
+                  >
+                  <Form.Group
+                    controlId="validationFormik101"
+                    className="position-relative"
+                  >
+                    <Form.Label>Ваша оценка*</Form.Label>
+                    <Form.Control
+                      as="select"
+                      name="rating"
+                      value={values.rating}
+                      onChange={handleChange}
+                      isInvalid={!!errors.rating}
+                    >
+                      <option>Выберите оценку...</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      </Form.Control>
+                    <Form.Control.Feedback type="invalid" tooltip>{errors.rating}</Form.Control.Feedback>
+                  </Form.Group>
+                  <Form.Group
+                    controlId="validationFormik102"
+                    className="position-relative"
+                  >
+                    <Form.Label>Ваш отзыв*</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      name="comment"
+                      rows="5"
+                      value={values.comment}
+                      onChange={handleChange}
+                      isInvalid={!!errors.comment}
+                    />
+                    <Form.Control.Feedback type="invalid" tooltip>{errors.comment}</Form.Control.Feedback>
+                  </Form.Group>
+                  <Button type="submit" disabled={!(dirty && isValid) || isSubmitting}>Добавить отзыв</Button>
+                  </Form>
+                  )}
+                </Formik> 
                 ) : <Message variant={'info'}>Только зарегистрированные пользователи могут оставить отзыв. <Link to="/login">Войдите</Link>, чтобы  оставить отзыв</Message>}
               </ListGroupItem>
             </ListGroup>
