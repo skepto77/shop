@@ -25,4 +25,36 @@ const getProductById = async (req, res) => {
   }
 };
 
-export { getProducts, getProductById };
+const createProductReview = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    const { rating, comment } = req.body;
+    if (product) {
+      const existsReview = product.reviews.find((item) => item.user.toString() === req.user._id.toString());
+      if(existsReview) {
+        throw new Error(`Вы уже оставляли отзыв для этого товара`);
+      }
+    }
+  
+    const review = {
+      user: req.user._id,
+      name: req.user.name,
+      rating: Number(rating),
+      comment,
+    }
+
+    product.reviews.push(review);
+
+    product.numReviews = product.reviews.length;
+
+    product.rating = product.reviews.reduce((acc, review) => review.rating + acc, 0) / product.reviews.length;
+
+    await product.save();
+
+    res.status(201).json({ message: `Отзыв добавлен` });
+  } catch (err) {
+    res.status(400).json({ message: `Ошибка добавления отзыва. ${err}` })
+  }
+};
+
+export { getProducts, getProductById, createProductReview };

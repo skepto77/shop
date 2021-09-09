@@ -1,7 +1,7 @@
 import { createStore} from 'redux';
 import { combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import { productList, productDetails } from './reducers/product';
+import { productList, productDetails, productCreateReview } from './reducers/product';
 import { cart } from './reducers/cart';
 import { 
   userLogin, 
@@ -25,6 +25,7 @@ import {
 const reducers = combineReducers({
   productList,
   productDetails,
+  productCreateReview,
   cart,
   user: userLogin,
   userRegister,

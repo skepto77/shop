@@ -1,39 +1,55 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { Row, Col, Image, Button, Tabs, Tab  } from 'react-bootstrap';
+import { useParams, Link } from 'react-router-dom';
+import { Row, Col, Image, Button, Tabs, Tab, Form,  ListGroup, ListGroupItem} from 'react-bootstrap';
 import Rating from '../componets/Rating';
 import Loader from '../componets/Loader';
 import Message from '../componets/Message';
 import Meta from '../componets/Meta';
-import { getProductDetails } from '../actions/product';
+import { getProductDetails, createProductReview } from '../actions/product';
 import { addToCart } from '../actions/cart';
+import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/product';
+
 
 const ProductPage = () => {
   const dispatch = useDispatch();
+
   const { loading, error, product } = useSelector((state) => state.productDetails);
+  const { success: successCreateReview, error: errorCreateReview, loading: loadingCreateReview } = useSelector((state) => state.productCreateReview);
+  const { userInfo } = useSelector((state) => state.user);
+  
   const {id} = useParams();
+
   const [quantity, setQuantity] = useState(1);
+  const [activeTab, setActiveTab] = useState('description');
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
 
   useEffect(() => {
-     dispatch(getProductDetails(id));
-   }, [dispatch, id]);
+    if(successCreateReview) {
+      setActiveTab('reviews');
+      alert('Ваш отзыв добавлен');
+      setRating(0);
+      setComment('');
+    }
+    dispatch(getProductDetails(id));
+    return () => {
+      dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
+    }
+  }, [dispatch, id, successCreateReview]);
+
 
   const handlerAddToCart = (id, quantity) => {
     dispatch(addToCart(id, quantity));
   }
 
-  // import Modal from 'react-bootstrap/Modal'
-  // const [show, setShow] = useState(false);
+  const handlerSubmitReview = (e) => {
+    e.preventDefault();
+    dispatch(createProductReview(id, { rating, comment }));
+  };
 
-  // const handleClose = () => setShow(false);
-  // const handleShow = () => setShow(true);
-
-  const reviews = 0;
-  
   return (
     <>
-
       {loading 
           ? <Loader /> 
           : error 
@@ -47,7 +63,7 @@ const ProductPage = () => {
             <Col md={8}>
               <Meta title={product.title} description={product.description}/>
               <h3>{product.title}</h3>
-              <Rating value={product.rating} text={` ${reviews} отзывов`}/>
+              <Rating value={product.rating} text={` ${product.numReviews} отзывов`}/>
               <h2>{product.price} &#8381;</h2>
               <p>{(product.status === 1) ? 'В наличии': 'Нет в наличии'}</p>
               <Button variant="light" size="lg" onClick={() => setQuantity((quantity) => quantity - 1)} style={{marginRight: '10px'}} disabled={quantity < 2}>-</Button> 
@@ -64,7 +80,7 @@ const ProductPage = () => {
           </Row>
           <Row  className='mt-5'>
             <Col md={12}>
-            <Tabs defaultActiveKey="description" id="uncontrolled-tab-example">
+            <Tabs defaultActiveKey={activeTab} id="uncontrolled-tab-example">
               <Tab eventKey="description" title="О товаре"  >
                 <p className='mt-4'>{product.description}</p>
               </Tab>
@@ -83,12 +99,58 @@ const ProductPage = () => {
                   )
                 })}
               </Tab>
-            </Tabs>
-            </Col>
-          </Row>
+              <Tab eventKey="reviews" title="Отзывы">
+              {loadingCreateReview && <Loader />}
+              {product.reviews.length === 0 && <Message variant={'info'}>Отзывов пока нет</Message>}
+              {errorCreateReview && <Message variant={'danger'}>{errorCreateReview}</Message>}
+              {successCreateReview && <Message variant={'success'}>Отзыв добавлен</Message>}
+              <ListGroup variant="flush">
+                {product.reviews.map((review, i) => (
+                  <ListGroupItem key={i}>
+                    <h5>{review.name}</h5>
+                    <div><Rating value={review.rating} /></div>
+                    {review.comment}
+                  </ListGroupItem>
+              ))}
+              <ListGroupItem>
+              {userInfo ? (
+                <Form onSubmit={handlerSubmitReview}>
+                <Form.Group controlId="rating">
+                  <Form.Label>Рейтинг товара</Form.Label>
+                  <Form.Control as="select"  value={rating} onChange={(e)=>setRating(e.target.value)} style={{background: 'rgba(0, 0, 0, 0.02)'}}>
+                    <option>Выберите оценку...</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="3">4</option>
+                    <option value="3">5</option>
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group controlId="comment">
+                  <Form.Label>Отзыв</Form.Label>
+                  <Form.Control 
+                    as="textarea"
+                    placeholder="Ваш отзыв" 
+                    value={comment}
+                    onChange={(e)=>setComment(e.target.value)}  
+                    row="5"
+                  />
+                </Form.Group>
+                <Button variant="primary" type="submit">
+                  Добавить отзыв
+                </Button>
+              </Form>
+                ) : <Message variant={'info'}>Только зарегистрированные пользователи могут оставить отзыв. <Link to="/login">Войдите</Link>, чтобы  оставить отзыв</Message>}
+              </ListGroupItem>
+            </ListGroup>
+                </Tab>
+              </Tabs>
+              </Col>
+            </Row>
         </>
       )}
     </>
   );
 };
+
 export default ProductPage;

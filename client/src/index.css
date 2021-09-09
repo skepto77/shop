@@ -58,4 +58,10 @@ i {
   border-top-left-radius: 10px !important;
   border-top-right-radius: 10px !important;
   border: 0;
+  margin-bottom: 0;
 }
+
+.comment-form .form-control {
+  background-color: rgb(247, 247, 247);
+}
+
